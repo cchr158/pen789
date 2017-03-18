@@ -1,0 +1,33 @@
+[16.03.2017 09:24:27] [INFO] External file loaded with 48 fuzzers
+[16.03.2017 09:24:27] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[16.03.2017 09:24:27] [INFO] Database loaded with 53 fuzzers
+[16.03.2017 09:26:43] [INFO] External file loaded with 48 fuzzers
+[16.03.2017 09:26:43] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[16.03.2017 09:26:43] [INFO] Database loaded with 53 fuzzers
+[16.03.2017 09:42:50] [INFO] External file loaded with 48 fuzzers
+[16.03.2017 09:42:50] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[16.03.2017 09:42:50] [INFO] Database loaded with 53 fuzzers
+[16.03.2017 09:43:33] [INFO] External file loaded with 48 fuzzers
+[16.03.2017 09:43:33] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[16.03.2017 09:43:33] [INFO] Database loaded with 53 fuzzers
+[16.03.2017 11:06:05] [INFO] External file loaded with 48 fuzzers
+[16.03.2017 11:06:05] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[16.03.2017 11:06:05] [INFO] Database loaded with 53 fuzzers
+[16.03.2017 11:09:04] [INFO] External file loaded with 48 fuzzers
+[16.03.2017 11:09:04] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[16.03.2017 11:09:04] [INFO] Database loaded with 53 fuzzers
+[16.03.2017 11:11:37] [INFO] External file loaded with 48 fuzzers
+[16.03.2017 11:11:37] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[16.03.2017 11:11:37] [INFO] Database loaded with 53 fuzzers
+[16.03.2017 11:14:15] [INFO] External file loaded with 48 fuzzers
+[16.03.2017 11:14:15] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[16.03.2017 11:14:15] [INFO] Database loaded with 53 fuzzers
+[16.03.2017 11:23:50] [INFO] External file loaded with 48 fuzzers
+[16.03.2017 11:23:50] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[16.03.2017 11:23:50] [INFO] Database loaded with 53 fuzzers
+[16.03.2017 11:58:57] [INFO] External file loaded with 48 fuzzers
+[16.03.2017 11:58:57] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[16.03.2017 11:58:57] [INFO] Database loaded with 53 fuzzers
+[16.03.2017 12:15:20] [INFO] External file loaded with 48 fuzzers
+[16.03.2017 12:15:20] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[16.03.2017 12:15:20] [INFO] Database loaded with 53 fuzzers

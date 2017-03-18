@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<config>
+<version>2004003</version>
+<userDir/>
+<connection>
+		<proxyChain>
+			<hostName/>
+			<port>8080</port>
+			
+			<realm/>
+			<userName/>
+			<password/>		
+			<prompt>false</prompt>
+		<enabled>false</enabled>
+</proxyChain>
+		<auth/>
+		<securityProtocolsEnabled>
+			<protocol>SSLv3</protocol>
+			<protocol>TLSv1</protocol>
+			<protocol>TLSv1.1</protocol>
+			<protocol>TLSv1.2</protocol>
+		</securityProtocolsEnabled>
+	<timeoutInSecs>20</timeoutInSecs>
+</connection>
+<proxy>
+		<ip>localhost</ip>
+		<port>8090</port>
+		<reverseProxy>
+			<use>0</use>	
+			<ip>localhost</ip>
+			<httpPort>80</httpPort>
+			<httpsPort>443</httpsPort>
+		</reverseProxy>		
+		<securityProtocolsEnabled>
+			<protocol>SSLv3</protocol>
+			<protocol>TLSv1</protocol>
+			<protocol>TLSv1.1</protocol>
+			<protocol>TLSv1.2</protocol>
+		</securityProtocolsEnabled>
+	</proxy>
+<view>
+		<processImages>0</processImages>
+		<displayOption>1</displayOption>
+		<editorView>2</editorView>
+		<brkPanelView>0</brkPanelView>
+		<showMainToolbar>1</showMainToolbar>
+	<locale>en_GB</locale>
+<messagePanelsPosition>
+<lastSelectedPosition>TABS_SIDE_BY_SIDE</lastSelectedPosition>
+</messagePanelsPosition>
+<main>
+<request>
+<httppanel>
+<defaultcomponent>RequestSplit</defaultcomponent>
+<components>
+<dividerLocation>-1</dividerLocation>
+<split>
+<header>
+<defaultview>HttpRequestHeaderSyntaxTextView</defaultview>
+<views>
+<HttpPanelSyntaxHighlightTextView>
+<aa>true</aa>
+<linenumbers>false</linenumbers>
+<wordwrap>true</wordwrap>
+<highlightline>false</highlightline>
+<fadehighlightline>false</fadehighlightline>
+<whitespaces>false</whitespaces>
+<newlines>false</newlines>
+<markocurrences>false</markocurrences>
+<roundedselection>false</roundedselection>
+<bracketmatch>false</bracketmatch>
+<animatedbracketmatch>false</animatedbracketmatch>
+</HttpPanelSyntaxHighlightTextView>
+</views>
+</header>
+<body>
+<defaultview>HttpRequestBodySyntaxTextView</defaultview>
+<views>
+<HttpPanelSyntaxHighlightTextView>
+<aa>true</aa>
+<linenumbers>false</linenumbers>
+<wordwrap>true</wordwrap>
+<highlightline>false</highlightline>
+<fadehighlightline>false</fadehighlightline>
+<whitespaces>false</whitespaces>
+<newlines>false</newlines>
+<markocurrences>false</markocurrences>
+<roundedselection>false</roundedselection>
+<bracketmatch>false</bracketmatch>
+<animatedbracketmatch>false</animatedbracketmatch>
+<syntax>
+<autodetect>true</autodetect>
+</syntax>
+</HttpPanelSyntaxHighlightTextView>
+</views>
+</body>
+</split>
+<all>
+<defaultview>HttpRequestSyntaxTextView</defaultview>
+<views>
+<HttpPanelSyntaxHighlightTextView>
+<aa>true</aa>
+<linenumbers>false</linenumbers>
+<wordwrap>true</wordwrap>
+<highlightline>false</highlightline>
+<fadehighlightline>false</fadehighlightline>
+<whitespaces>false</whitespaces>
+<newlines>false</newlines>
+<markocurrences>false</markocurrences>
+<roundedselection>false</roundedselection>
+<bracketmatch>false</bracketmatch>
+<animatedbracketmatch>false</animatedbracketmatch>
+</HttpPanelSyntaxHighlightTextView>
+</views>
+</all>
+<websocket>
+<defaultview>WebSocketSyntaxHighlightTextView</defaultview>
+<views>
+<HttpPanelSyntaxHighlightTextView>
+<aa>true</aa>
+<linenumbers>false</linenumbers>
+<wordwrap>true</wordwrap>
+<highlightline>false</highlightline>
+<fadehighlightline>false</fadehighlightline>
+<whitespaces>false</whitespaces>
+<newlines>false</newlines>
+<markocurrences>false</markocurrences>
+<roundedselection>false</roundedselection>
+<bracketmatch>false</bracketmatch>
+<animatedbracketmatch>false</animatedbracketmatch>
+</HttpPanelSyntaxHighlightTextView>
+</views>
+</websocket>
+</components>
+</httppanel>
+</request>
+<response>
+<httppanel>
+<defaultcomponent>ResponseSplit</defaultcomponent>
+<components>
+<all>
+<defaultview>HttpPanelSyntaxHighlightTextView</defaultview>
+<views>
+<HttpPanelSyntaxHighlightTextView>
+<aa>true</aa>
+<linenumbers>false</linenumbers>
+<wordwrap>true</wordwrap>
+<highlightline>false</highlightline>
+<fadehighlightline>false</fadehighlightline>
+<whitespaces>false</whitespaces>
+<newlines>false</newlines>
+<markocurrences>false</markocurrences>
+<roundedselection>false</roundedselection>
+<bracketmatch>false</bracketmatch>
+<animatedbracketmatch>false</animatedbracketmatch>
+<syntax>
+<autodetect>true</autodetect>
+</syntax>
+</HttpPanelSyntaxHighlightTextView>
+</views>
+</all>
+<websocket>
+<defaultview>WebSocketSyntaxHighlightTextView</defaultview>
+<views>
+<HttpPanelSyntaxHighlightTextView>
+<aa>true</aa>
+<linenumbers>false</linenumbers>
+<wordwrap>true</wordwrap>
+<highlightline>false</highlightline>
+<fadehighlightline>false</fadehighlightline>
+<whitespaces>false</whitespaces>
+<newlines>false</newlines>
+<markocurrences>false</markocurrences>
+<roundedselection>false</roundedselection>
+<bracketmatch>false</bracketmatch>
+<animatedbracketmatch>false</animatedbracketmatch>
+</HttpPanelSyntaxHighlightTextView>
+</views>
+</websocket>
+<dividerLocation>-1</dividerLocation>
+<split>
+<header>
+<defaultview>HttpPanelSyntaxHighlightTextView</defaultview>
+<views>
+<HttpPanelSyntaxHighlightTextView>
+<aa>true</aa>
+<linenumbers>false</linenumbers>
+<wordwrap>true</wordwrap>
+<highlightline>false</highlightline>
+<fadehighlightline>false</fadehighlightline>
+<whitespaces>false</whitespaces>
+<newlines>false</newlines>
+<markocurrences>false</markocurrences>
+<roundedselection>false</roundedselection>
+<bracketmatch>false</bracketmatch>
+<animatedbracketmatch>false</animatedbracketmatch>
+</HttpPanelSyntaxHighlightTextView>
+</views>
+</header>
+<body>
+<defaultview>HttpPanelSyntaxHighlightTextView</defaultview>
+<views>
+<HttpPanelSyntaxHighlightTextView>
+<aa>true</aa>
+<linenumbers>false</linenumbers>
+<wordwrap>true</wordwrap>
+<highlightline>false</highlightline>
+<fadehighlightline>false</fadehighlightline>
+<whitespaces>false</whitespaces>
+<newlines>false</newlines>
+<markocurrences>false</markocurrences>
+<roundedselection>false</roundedselection>
+<bracketmatch>false</bracketmatch>
+<animatedbracketmatch>false</animatedbracketmatch>
+<syntax>
+<autodetect>true</autodetect>
+</syntax>
+</HttpPanelSyntaxHighlightTextView>
+</views>
+</body>
+</split>
+</components>
+</httppanel>
+</response>
+</main>
+</view>
+<start>
+        <checkForUpdates>false</checkForUpdates>
+    <dayLastChecked/>
+</start>
+<certificate>
+		<use>0</use>
+		<clientCertLocation/>
+		<experimentalSlotListIndex>false</experimentalSlotListIndex>
+	</certificate>
+<spider>
+		<thread>2</thread>
+		<maxDepth>10</maxDepth>
+		
+		<postform>true</postform>
+		<processform>true</processform>
+		<sendCookies>false</sendCookies>
+		<skipurl/>
+		<requestwait>200</requestwait>
+		<parseComments>true</parseComments>
+		<parseRobotsTxt>true</parseRobotsTxt>
+	<handleParameters>USE_ALL</handleParameters>
+</spider>
+<scanner>
+		<hostPerScan>2</hostPerScan>
+		<threadPerHost>2</threadPerHost>
+	<strength>HIGH</strength>
+</scanner>
+<portscan>
+		<threadPerHost>5</threadPerHost>
+		<maxPort>10240</maxPort>
+	</portscan>
+<pscans>
+		<autoTagScanners>
+			<scanner>
+				<name>html_tag_form</name>
+				<type>TAG</type>
+				<config>Form</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>&lt;form</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_tag_password</name>
+				<type>TAG</type>
+				<config>Password</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>&lt;password\s</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_type_password</name>
+				<type>TAG</type>
+				<config>Password</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>type\s*=\s*['"]?password['"]?</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_type_hidden</name>
+				<type>TAG</type>
+				<config>Hidden</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>type\s*=\s*['"]?hidden['"]?</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_type_upload</name>
+				<type>TAG</type>
+				<config>Upload</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>type\s*=\s*['"]?file['"]?</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_tag_object</name>
+				<type>TAG</type>
+				<config>Object</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>&lt;object\s</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_tag_script</name>
+				<type>TAG</type>
+				<config>Script</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>&lt;script</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_mailto</name>
+				<type>TAG</type>
+				<config>MailTo</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>&lt;.*href\s*['"]?mailto:</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_setcookie</name>
+				<type>TAG</type>
+				<config>SetCookie</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex>set-cookie</resHeadRegex>
+				<resBodyRegex/>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_comment1</name>
+				<type>TAG</type>
+				<config>Comment</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>/\*</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_comment2</name>
+				<type>TAG</type>
+				<config>Comment</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>&lt;!--</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>response_json</name>
+				<type>TAG</type>
+				<config>JSON</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex>type\s*:\s*application\/json</resHeadRegex>
+				<resBodyRegex/>
+				<enabled>true</enabled>
+			</scanner>
+		</autoTagScanners>
+	</pscans>
+<addons>
+<block/>
+</addons>
+<reveal version="1">
+<enabled>false</enabled>
+</reveal>
+<ajaxSpider version="3">
+<browserId>HtmlUnit</browserId>
+</ajaxSpider>
+<fuzz version="1">
+<defaultThreadsPerFuzzer>5</defaultThreadsPerFuzzer>
+<defaultCategoryName/>
+<defaultFuzzDelayInMs>0</defaultFuzzDelayInMs>
+<customFuzzerLastSelectedDirectory/>
+</fuzz>
+<selenium version="1"/>
+<plugins>
+<p6>
+<enabled>true</enabled>
+</p6>
+<p7>
+<enabled>true</enabled>
+</p7>
+<p40009>
+<enabled>true</enabled>
+</p40009>
+<p40012>
+<enabled>true</enabled>
+</p40012>
+<p40014>
+<enabled>true</enabled>
+</p40014>
+<p40018>
+<enabled>true</enabled>
+</p40018>
+<p90019>
+<enabled>true</enabled>
+</p90019>
+<p90020>
+<enabled>true</enabled>
+</p90020>
+<p0>
+<enabled>true</enabled>
+</p0>
+<p20019>
+<enabled>true</enabled>
+</p20019>
+<p30001>
+<enabled>true</enabled>
+</p30001>
+<p30002>
+<enabled>true</enabled>
+</p30002>
+<p40003>
+<enabled>true</enabled>
+</p40003>
+<p40008>
+<enabled>true</enabled>
+</p40008>
+<p40016>
+<enabled>true</enabled>
+</p40016>
+<p40017>
+<enabled>true</enabled>
+</p40017>
+<p50000>
+<enabled>true</enabled>
+</p50000>
+</plugins>
+<dynssl>
+<param>
+<rootca>_u3-7QAAAAIAAAABAAAAAQARb3dhc3BfemFwX3Jvb3RfY2EAAAFaVXuzEAAABQIwggT-MA4GCisGAQQBKgIRAQEFAASCBOooRWZpo0AZmIR-mIH4oG3gZo68dlliBd86TV4rvqnsr1kgxsN7ANjHAtDKSIqubSUUHbY2Okiou-w4MSlzl0-GPkL2r4Av4R7FQw0dHUyWchpIc9ZRTACa5frXo2A_whNguY7GPMZYNasVC7GT0tU5ewoiHXLmQgjLqPY8obF_LJ69hMxX4SQUmZRvXthNMZEft6mmMmN4q9MAT3_3hnKT-cICoW3PpvKC9RbC0ac3g9ONIkC1wFz7ZTZCQO3p-icRvmu6Cd9ZnkWGFhB4CXTV6Qy_Z6mPM9ZXZbPxxsqmcdlUjht4gdSD_souAB3PD6JH4NBHy62NGiB-vApIBS8bV_EI1BH0msI_LP-0gnkx_mtn5Z1QQ_j8foAr7hsNEIUW0wq1-SgpcSEZIHMYy7Ew_2p_MNzLHIFL24zGLTSG5WcCmEEUu3na3C5LH3cdHl_pN53s_DZN9pN5trR6gYh16C8NYgGFErSsMSdZmhdGZ64fESJZBCFpE1BcUmA1zSfQozuCQCg3h44MOtD7Af-094yD9-UKRI2GnAdWI6HVVp1YQuPJFN2sLbUiGflZFJWYUJzsOEw9-bwrzWmWSsh4trwKcxqd0XmYtQ4jUedFuDdNGlnADNnAeU18eKQTMPYbj4f1Z491CYpd7pA3vN5hS9VmtNmjiC_AgnCraqb0RSFh734sCH9DLImPLcbH2gyoO7M3QKVbx4LvXXTSkcIeA5RD2ftbxfa1OPrAu9IpufZZnK9mICgZm7uJ7xNWt2Y16m5fsMRZVeRX70DY4oJpe8ViMb0EwDF1QNBgKmBjhRJAXhhVWvo8Nyiba-VC9lZHdLjkmQ_A6O6ASHkyiK-DDz4xG1eXCl5HP4exZVZyffK4A47RH-fSThJMW32rlrCmPpoRPeqH7zPXBB6gob_CNJbwP4iGs4WwIrigCARQKwRBOFci93nYsAHxXTvEI8UgMCVGAGcs0MkgwwNNHbcCrXkzG2qa4yqLooclckPnM9lSzWJjt1lnNVH4qyZaa641wPd6v1XmFs56kvWak5RLPQPpc_mxDB9cAQstr40sSS3fozVRwPWlRaahefI5Fx-Nx1hFjPVNuxdbEt7Mh3mgrxaYxjprXUDGS_24iA0OCOLApM7Sx2jmdt4Os5pSFwFGdqET4tzqSMwo84_gctuPxZ1MgctPzVUQS_qAMHnJTBlez9OnlGl-xzmEIEMp5ETGF3tXGmJPSRBPWwPQW8hSMYYUkVuZs9a6RA9PQacMclJlhzkxNZpXPzI-4Ho-jjK562dPmKe-OV2ENy99BodW1llq2Aychf2ivh4wUVBiFy7_qJ67UujwCx-1uWVm2kqWYn0n9uV6-50JVcoYN5eHtUR5ZOTZoHmtvVozm5REjXuhj5ctB-JkTCM8fPQACt6_nO4yU2UrmDm-M3LDXQrD-Ee9P6Q98_-eF4tw5rclacBG4IA6JJpoSMyF-eyUa66wL1vuX7nJWflWTuYs3JZMTYRz4Hn3DEI8c26x_tumRHpR_IMua9JuDWfV-0BD2i-tHEJPNGijDQteJzux1mN3Jrv80mHVocpikz6IBtoHVUopVXE_D7VvYjAL5wBaUsDa14NvOb3D0WMdHaLIRyIH1YCsbP2uBBUjHNiJodko6fi2l6tYko8YB3Ai1Ad8wOmLMPc4fq58OGnlAAAAAQAFWC41MDkAAAUOMIIFCjCCA_KgAwIBAgIEujwmhTANBgkqhkiG9w0BAQsFADCBhTEnMCUGA1UEAwweT1dBU1AgWmVkIEF0dGFjayBQcm94eSBSb290IENBMRkwFwYDVQQHDBA2MzhhYWQ2ZDY1ZTlhNzA2MRYwFAYDVQQKDA1PV0FTUCBSb290IENBMRowGAYDVQQLDBFPV0FTUCBaQVAgUm9vdCBDQTELMAkGA1UEBhMCeHgwHhcNMTcwMjE5MDgyNzM0WhcNMTgwMjE5MDgyNzM0WjCBhTEnMCUGA1UEAwweT1dBU1AgWmVkIEF0dGFjayBQcm94eSBSb290IENBMRkwFwYDVQQHDBA2MzhhYWQ2ZDY1ZTlhNzA2MRYwFAYDVQQKDA1PV0FTUCBSb290IENBMRowGAYDVQQLDBFPV0FTUCBaQVAgUm9vdCBDQTELMAkGA1UEBhMCeHgwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCW_KM__at3h-1_6S9NvHDM-yfEx90fRSdaXekNfo1kjpRvfuHEiIwt_CoP3QeqkpuUKgQGxiTopjoboRkKJRVNvXJwG7g0TM0YGWmcV5O_8QR1XOPTMTdwjgow7JgvxJaTZebEVb-J_KwuDyjcPRw_V_oECXQvacVl2uvlc1gD6EQ0eyoxt3-O8eGkgtNp5ryxkeWaSZZLAl_fwYJmdtMcBM3vzCOVtxFGsejsQwVV5J3sw8bxeePVEZyLlgd_3dawIC-U0U6n8wwx8PTjHMWFOdWfivvSxHWKvhULFeWQYaNdd9Q0FZ5w2SRhbEIDMMOyxepWsTD9CNHJDqqXPjXvAgMBAAGjggF-MIIBejCCATMGA1UdDgSCASoEggEmMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlvyjP_2rd4ftf-kvTbxwzPsnxMfdH0UnWl3pDX6NZI6Ub37hxIiMLfwqD90HqpKblCoEBsYk6KY6G6EZCiUVTb1ycBu4NEzNGBlpnFeTv_EEdVzj0zE3cI4KMOyYL8SWk2XmxFW_ifysLg8o3D0cP1f6BAl0L2nFZdrr5XNYA-hENHsqMbd_jvHhpILTaea8sZHlmkmWSwJf38GCZnbTHATN78wjlbcRRrHo7EMFVeSd7MPG8Xnj1RGci5YHf93WsCAvlNFOp_MMMfD04xzFhTnVn4r70sR1ir4VCxXlkGGjXXfUNBWecNkkYWxCAzDDssXqVrEw_QjRyQ6qlz417wIDAQABMA8GA1UdEwEB_wQFMAMBAf8wCwYDVR0PBAQDAgG2MCMGA1UdJQQcMBoGCCsGAQUFBwMBBggrBgEFBQcDAgYEVR0lADANBgkqhkiG9w0BAQsFAAOCAQEARDr5-XmPSEkbvH7iRtJCeKL6ga8yzblX2isykcDfdDebbd4dDZJGENxhpqbxigDW_HNPsV7HEHG_Eyl-Hjr5o3NMZHFsjmgm9lBSINjfY4Hf9RXIKp8pQYprGEreptMjWg-IURHRDZQ_Prc9ZppbpuTTqG-7WZ4D1ER4zGt9PbRf5VKlvN2uFzkUFRoOM0kESfP_CyQKaRY9rdsF64xTi6tlUmzNDZWJpfLPVQuM07fFWabgCwCaKNhZCTLQ2CqzXS-UhPC_tymgGjI5Lk8hHSYrtNreIjh7FDx16Q0fuz3RyCGJP-L-jn9w8y4ZNEBnR9c_yrFEaip1s3SBhKNIDwTwewIbPkKtYHn-xQUvN_dSv7_K</rootca>
+</param>
+</dynssl>
+<database>
+<newsession>3</newsession>
+<newsessionprompt>true</newsessionprompt>
+</database>
+<api>
+<key>p3us6m48ts1mud2hb57hunp45b</key>
+</api>
+<runnableAddOns>
+<addon>
+<id>help</id>
+<version>6</version>
+</addon>
+<addon>
+<id>diff</id>
+<version>6</version>
+</addon>
+<addon>
+<id>websocket</id>
+<version>11</version>
+<extensions>
+<extension>org.zaproxy.zap.extension.websocket.fuzz.ExtensionWebSocketFuzzer</extension>
+</extensions>
+</addon>
+<addon>
+<id>zest</id>
+<version>21</version>
+</addon>
+<addon>
+<id>pscanrules</id>
+<version>16</version>
+</addon>
+<addon>
+<id>invoke</id>
+<version>3</version>
+</addon>
+<addon>
+<id>gettingStarted</id>
+<version>5</version>
+</addon>
+<addon>
+<id>coreLang</id>
+<version>10</version>
+</addon>
+<addon>
+<id>directorylistv1</id>
+<version>3</version>
+</addon>
+<addon>
+<id>quickstart</id>
+<version>18</version>
+</addon>
+<addon>
+<id>ascanrules</id>
+<version>23</version>
+</addon>
+<addon>
+<id>saverawmessage</id>
+<version>3</version>
+</addon>
+<addon>
+<id>scripts</id>
+<version>16</version>
+</addon>
+<addon>
+<id>bruteforce</id>
+<version>5</version>
+</addon>
+<addon>
+<id>alertFilters</id>
+<version>3</version>
+</addon>
+<addon>
+<id>onlineMenu</id>
+<version>4</version>
+</addon>
+<addon>
+<id>fuzz</id>
+<version>5</version>
+</addon>
+<addon>
+<id>spiderAjax</id>
+<version>15</version>
+</addon>
+<addon>
+<id>selenium</id>
+<version>5</version>
+</addon>
+<addon>
+<id>tips</id>
+<version>5</version>
+</addon>
+<addon>
+<id>reveal</id>
+<version>2</version>
+</addon>
+</runnableAddOns>
+</config>

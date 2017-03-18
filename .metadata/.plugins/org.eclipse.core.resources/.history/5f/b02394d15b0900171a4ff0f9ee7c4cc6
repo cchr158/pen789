@@ -1,0 +1,200 @@
+package framesAndPanels;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.text.DefaultCaret;
+
+import framesAndPanels.Constants.attacks;
+import pen789.pen789;
+
+public class AttackOptionScreen {
+
+	private pen789 myPen789;
+	private JFrame attackFrame;
+	private JPanel helpPanel;
+	private JTextPane helpPane;
+//	private JLabel helpPane;
+	private JFrame helpFrame;
+
+	AttackOptionScreen(pen789 myPen789) {
+		this.myPen789 = myPen789;
+		this.myPen789.resetFrames();
+		this.attackFrame = new JFrame("pen789");
+		this.helpPanel = new JPanel();
+		this.helpPane = new JTextPane();
+//		this.helpPane = new JLabel();
+		this.helpFrame = new JFrame("Attack Help");
+		this.helpFrame.addWindowListener(this.myPen789.exitListener);
+		this.helpFrame.setPreferredSize(new Dimension(2*Constants.SCREEN_SIZE.width/5,3*Constants.SCREEN_SIZE.height/5));
+		this.attackFrame.addWindowListener(this.myPen789.exitListener);
+		this.attackFrame.setPreferredSize(new Dimension(2*Constants.SCREEN_SIZE.width/5,3*Constants.SCREEN_SIZE.height/5));
+		title(attackFrame);
+		buttons(attackFrame);
+		this.myPen789.nextFrame(attackFrame);
+	}
+
+	private void buttons(JFrame attackFrame) {
+		JPanel buttonPanel = new JPanel(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.anchor = GridBagConstraints.CENTER;
+		c.gridheight = 1;
+		c.gridwidth = 6;
+		c.insets = new Insets(5,0,5,0);
+		c.gridx = 0;
+		c.gridy = 0;
+		
+		JCheckBox xssCheckBox = new JCheckBox("XSS");
+		xssCheckBox.setFont(new Font(xssCheckBox.getFont().getFontName(), Font.PLAIN, Constants.BUTTON_FONT_SIZE));
+		JCheckBox CSRFCheckBox = new JCheckBox("(Login) CSRF");
+		CSRFCheckBox.setFont(new Font(CSRFCheckBox.getFont().getFontName(), Font.PLAIN, Constants.BUTTON_FONT_SIZE));
+		JCheckBox SQLCheckBox = new JCheckBox("SQL injection");
+		SQLCheckBox.setFont(new Font(SQLCheckBox.getFont().getFontName(), Font.PLAIN, Constants.BUTTON_FONT_SIZE));
+		
+		JButton HelpButton = new JButton("Help");
+		HelpButton.setFont(new Font(HelpButton.getFont().getFontName(), Font.PLAIN, Constants.BUTTON_FONT_SIZE));
+		HelpButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				attackHelp();
+			}
+		});
+		JButton nextButton = new JButton("next");
+		nextButton.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				if(xssCheckBox.isSelected() || CSRFCheckBox.isSelected() || 
+						SQLCheckBox.isSelected()){
+					new AttackLunchScreen(myPen789, xssCheckBox.isSelected()?attacks.XSS_ATTACK:
+						attacks.NONE, CSRFCheckBox.isSelected()?attacks.CSRF_ATTACK:attacks.NONE,
+									SQLCheckBox.isSelected()?attacks.SQL_ATTACK:attacks.NONE);
+				}
+			}
+		});
+		JButton backButton = new JButton("Back");
+		backButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				attackFrame.dispose();
+				new pen789(myPen789.ZAP_ADDRESS, myPen789.ZAP_PORT, myPen789.ZAP_API_KEY, myPen789.target);
+			}
+		});
+		buttonPanel.add(xssCheckBox, c);
+		c.gridy = GridBagConstraints.RELATIVE;
+		buttonPanel.add(CSRFCheckBox, c);
+		c.gridy = GridBagConstraints.RELATIVE;
+		buttonPanel.add(SQLCheckBox, c);
+		c.gridy = GridBagConstraints.RELATIVE;
+		buttonPanel.add(HelpButton, c);
+		c.fill = GridBagConstraints.NONE;
+		c.anchor = GridBagConstraints.EAST;
+		c.gridwidth = 1;
+		c.insets = new Insets(5,0,5,0);
+		c.gridy = GridBagConstraints.RELATIVE;
+		c.gridx = 4;
+		buttonPanel.add(nextButton, c);
+		c.gridx = 5;
+		buttonPanel.add(backButton, c);
+		attackFrame.add(buttonPanel);
+	}
+
+	protected void attackHelp() {
+		JLabel helpTitle = new JLabel("<HTML><h1 align='center'>Attack Help</h1></HTML>");
+		String helpText = "<HTML><head><style type='text/css'>p { font-size: 18;}h1 { font-size: 72; "
+				+ "font-weight: bolder;}li { font-size: 24;}</style></head><BODY>"/*+"<h1 align='center'>Attack Help</h1>"*/
+				+ "<p>By selecting attacks from the attack menu (xss, csrf and, SQL), you can luanch "
+				+ "the scanner to run attacks against the target you entered earler. Below the three attacks "
+				+ "are explained:</p><ol> <li><FONT size='6'>Cross Site Scripting (XSS):</FONT><p>Cross-Site "
+				+ "Scripting (XSS) attacks are a type of injection, in which malicious scripts are injected "
+				+ "into otherwise benign and trusted web sites. XSS attacks occur when an attacker uses a web "
+				+ "application to send malicious code, generally in the form of a browser side script, to a "
+				+ "different end user. Flaws that allow these attacks to succeed are quite widespread and occur "
+				+ "anywhere a web application uses input from a user within the output it generates without "
+				+ "validating or encoding it.</p> <p>An attacker can use XSS to send a malicious script to an "
+				+ "unsuspecting user. The end user’s browser has no way to know that the script should not be "
+				+ "trusted, and will execute the script. Because it thinks the script came from a trusted source, "
+				+ "the malicious script can access any cookies, session tokens, or other sensitive information "
+				+ "retained by the browser and used with that site. These scripts can even rewrite the content of "
+				+ "the HTML page.</p> <p>Cross-Site Scripting (XSS) attacks occur when:</p> <ul>  <li>Data enters "
+				+ "a Web application through an untrusted source, most frequently a web request.</li>  "
+				+ "<li>The data is included in dynamic content that is sent to a web user without being "
+				+ "validated for malicious content.</li> </ul></li> <li><FONT size='6'>Cross Site Request Forgery "
+				+ "(CSRF):</FONT><p>CSRF is an attack that forces an end user to execute unwanted actions on a web "
+				+ "application in which he/she is currently authenticated. With a little help of social engineering "
+				+ "(like sending a link via email or chat), an attacker may force the users of a web application "
+				+ "to execute actions of the attacker's choosing. A successful CSRF exploit can compromise end "
+				+ "user data and operation, when it targets a normal user. If the targeted end user is the "
+				+ "administrator account, a CSRF attack can compromise the entire web application.</p> "
+				+ "<p>CSRF relies on the following:</p> <ol>  <li>Web browser behavior regarding the handling of "
+				+ "session-related information such as cookies and http authentication information</li>  "
+				+ "<li>Knowledge by the attacker of valid web application URLs</li>  <li>Application session "
+				+ "management relying only on information which is known by the browser</li>  <li>Existence of "
+				+ "HTML tags whose presence cause immediate access to an http[s] resource; for example the image "
+				+ "tag img</li> </ol> <p>Points 1, 2, and 3 are essential for the vulnerability to be present, "
+				+ "while point 4 facilitates the actual exploitation, but is not strictly required.</p> <p>"
+				+ "<b>NOTE:</b> if you select the CSRF option from the attacks menu then there will be an aditional"
+				+ " step to the scan. This will involve registering 2 users with the target service you specified."
+				+ " One to act as the victim and another to act as the attacker. Due to the nature of CSRF attacks"
+				+ " neither an attacker or victim can know if the attack was performed succefully imidatly after "
+				+ "it has been performed. The best way to tell is to try and see if the state of the service has "
+				+ "been changed after the attack. To assist with this you will be asked to inspect the html and "
+				+ "headers for requests and responses.</p> </li> <li><FONT size='6'>Structured Query Language "
+				+ "injection (SQLi):</FONT><p>A SQL injection attack consists of insertion or 'injection' of a "
+				+ "SQL query via the input data from the client to the application. A successful SQL injection "
+				+ "exploit can read sensitive data from the database, modify database data (Insert/Update/Delete),"
+				+ " execute administration operations on the database (such as shutdown the DBMS), recover the "
+				+ "content of a given file present on the DBMS file system and in some cases issue commands to "
+				+ "the operating system. SQL injection attacks are a type of injection attack, in which SQL "
+				+ "commands are injected into data-plane input in order to effect the execution of predefined "
+				+ "SQL commands.</p> <p>SQL Injection attacks can be divided into the following three classes:</p> "
+				+ "<ul> <li>Inband: data is extracted using the same channel that is used to inject the SQL code. "
+				+ "This is the most straightforward kind of attack, in which the retrieved data is presented directly"
+				+ " in the application web page.</li> <li>Out-of-band: data is retrieved using a different channel "
+				+ "(e.g., an email with the results of the query is generated and sent to the tester).</li> "
+				+ "<li>Inferential or Blind: there is no actual transfer of data, but the tester is able to "
+				+ "reconstruct the information by sending particular requests and observing the resulting behavior"
+				+ " of the DB Server.</li></ul> </li></ol><P>More information is avalable at "
+				+ "https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project</P></BODY></HTML>";
+		this.helpPane.setContentType("text/html");
+		this.helpPane.setText(helpText);
+		this.helpPane.setEditable(false);
+		this.helpPanel.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.BOTH;
+		c.anchor = GridBagConstraints.PAGE_START;
+		c.gridx = c.gridy = 0;
+		DefaultCaret caret = (DefaultCaret)this.helpPane.getCaret();
+		this.helpPane.setCaretPosition(0);
+		this.helpPanel.add(new JScrollPane(this.helpPane), c);
+		helpFrame.add(this.helpPanel, BorderLayout.PAGE_START);
+		this.myPen789.nextFrame(helpFrame);
+	}
+
+	private void title(JFrame attackFrame) {
+		JTextPane titleText = new JTextPane();
+		titleText.setContentType("text/html");
+		titleText.setText("<HTML><head><style>p{font-weight: bold;font-size: 72;}</style></head>"
+				+ "<BODY><p>Select An Attack</p></BODY></HTML>");
+		titleText.setEditable(false);
+		JPanel titlePanel = new JPanel();
+		titlePanel.add(titleText);
+		attackFrame.add(titlePanel, BorderLayout.NORTH);
+	}
+
+}

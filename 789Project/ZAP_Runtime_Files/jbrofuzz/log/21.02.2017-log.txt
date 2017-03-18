@@ -1,0 +1,318 @@
+[21.02.2017 00:04:26] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 00:04:26] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 00:04:26] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 00:07:34] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 00:07:34] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 00:07:34] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 00:13:38] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 00:13:38] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 00:13:38] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 00:18:50] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 00:18:50] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 00:18:50] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 00:19:38] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 00:19:38] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 00:19:38] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 00:24:56] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 00:24:56] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 00:24:56] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 00:29:47] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 00:29:47] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 00:29:47] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 00:32:05] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 00:32:05] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 00:32:05] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 00:34:27] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 00:34:27] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 00:34:28] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 00:38:05] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 00:38:05] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 00:38:05] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 01:13:39] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 01:13:39] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 01:13:39] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 01:16:26] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 01:16:26] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 01:16:26] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 01:23:14] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 01:23:14] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 01:23:14] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 01:30:45] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 01:30:45] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 01:30:45] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 01:45:39] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 01:45:39] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 01:45:39] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:01:30] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:01:30] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:01:30] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:05:47] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:05:47] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:05:47] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:07:42] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:07:42] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:07:42] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:08:38] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:08:38] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:08:38] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:09:57] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:09:57] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:09:57] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:11:39] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:11:39] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:11:39] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:13:31] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:13:31] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:13:31] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:14:30] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:14:30] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:14:30] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:17:24] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:17:24] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:17:24] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:18:39] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:18:39] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:18:39] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:19:32] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:19:32] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:19:32] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:21:48] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:21:48] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:21:48] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:24:48] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:24:48] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:24:48] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:26:47] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:26:47] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:26:47] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:27:30] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:27:30] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:27:30] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:29:02] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:29:02] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:29:02] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:29:54] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:29:54] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:29:54] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:33:17] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:33:17] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:33:17] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 02:34:04] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 02:34:04] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 02:34:04] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 12:54:44] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 12:54:44] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 12:54:44] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 12:58:39] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 12:58:39] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 12:58:39] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:04:22] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:04:22] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:04:22] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:08:00] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:08:00] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:08:00] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:08:59] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:08:59] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:08:59] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:10:18] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:10:18] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:10:18] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:14:19] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:14:19] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:14:19] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:15:52] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:15:52] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:15:52] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:22:07] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:22:07] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:22:07] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:23:07] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:23:07] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:23:07] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:24:06] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:24:06] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:24:06] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:25:38] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:25:38] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:25:38] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:48:03] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:48:03] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:48:03] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:49:47] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:49:47] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:49:47] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:50:50] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:50:50] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:50:50] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:52:31] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:52:31] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:52:31] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:57:37] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:57:37] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:57:37] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 13:58:27] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 13:58:27] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 13:58:27] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:01:12] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:01:12] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:01:12] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:01:58] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:01:58] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:01:58] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:04:15] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:04:15] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:04:15] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:05:00] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:05:00] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:05:00] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:05:38] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:05:38] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:05:38] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:09:11] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:09:11] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:09:11] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:10:58] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:10:58] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:10:59] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:11:50] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:11:50] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:11:50] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:13:16] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:13:16] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:13:17] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:18:46] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:18:46] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:18:46] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:29:09] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:29:09] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:29:09] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:34:09] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:34:09] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:34:09] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:36:30] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:36:30] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:36:30] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:37:59] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:37:59] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:37:59] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:49:02] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:49:02] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:49:03] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:51:29] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:51:29] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:51:29] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:54:16] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:54:16] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:54:16] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 14:55:26] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 14:55:26] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 14:55:27] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:02:41] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:02:41] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:02:41] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:04:30] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:04:30] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:04:30] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:07:03] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:07:03] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:07:04] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:14:04] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:14:04] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:14:04] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:18:10] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:18:10] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:18:10] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:20:17] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:20:17] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:20:17] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:25:42] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:25:42] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:25:42] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:34:30] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:34:30] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:34:30] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:35:39] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:35:39] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:35:39] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:39:03] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:39:03] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:39:03] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:40:47] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:40:47] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:40:47] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:43:57] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:43:57] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:43:57] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:45:16] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:45:16] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:45:17] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 15:51:28] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 15:51:28] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 15:51:28] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:02:04] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:02:04] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:02:04] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:04:47] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:04:47] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:04:47] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:08:01] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:08:01] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:08:01] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:13:16] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:13:16] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:13:16] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:14:35] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:14:35] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:14:35] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:15:38] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:15:38] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:15:38] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:17:13] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:17:13] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:17:13] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:18:00] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:18:00] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:18:00] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:21:51] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:21:51] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:21:51] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:23:32] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:23:32] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:23:33] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:27:08] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:27:08] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:27:08] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:30:13] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:30:13] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:30:13] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:31:26] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:31:26] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:31:26] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 16:33:48] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 16:33:48] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 16:33:49] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 17:01:48] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 17:01:48] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 17:01:48] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 17:11:24] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 17:11:24] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 17:11:24] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 17:14:51] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 17:14:51] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 17:14:51] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 17:19:07] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 17:19:07] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 17:19:07] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 18:42:08] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 18:42:08] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 18:42:08] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 18:56:43] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 18:56:43] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 18:56:43] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 19:03:12] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 19:03:12] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 19:03:13] [INFO] Database loaded with 53 fuzzers
+[21.02.2017 21:01:58] [INFO] External file loaded with 48 fuzzers
+[21.02.2017 21:01:58] [INFO] Adding 5 Zero Fuzzers to the fuzzing Database
+[21.02.2017 21:01:58] [INFO] Database loaded with 53 fuzzers

@@ -1,0 +1,5 @@
+15-Mar-2017 18:54:33.387 INFO [localhost-startStop-1] org.apache.catalina.core.ApplicationContext.log InitServlet init TheBodgeItStore :)
+15-Mar-2017 18:54:34.094 INFO [localhost-startStop-1] org.apache.catalina.core.ApplicationContext.log ContextListener: contextInitialized()
+15-Mar-2017 18:54:34.094 INFO [localhost-startStop-1] org.apache.catalina.core.ApplicationContext.log SessionListener: contextInitialized()
+15-Mar-2017 22:18:47.362 INFO [localhost-startStop-2] org.apache.catalina.core.ApplicationContext.log SessionListener: contextDestroyed()
+15-Mar-2017 22:18:47.362 INFO [localhost-startStop-2] org.apache.catalina.core.ApplicationContext.log ContextListener: contextDestroyed()

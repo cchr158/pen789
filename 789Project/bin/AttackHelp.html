@@ -1,0 +1,58 @@
+<HTML>
+<head>
+<style type="text/css">
+p {
+	font-size: 18;
+}
+
+h1 {
+	font-size: 72;
+	font-weight: bolder;
+}
+
+li {
+	font-size: 24;
+}
+li{
+	font-size: 18;
+}
+</style>
+</head>
+<BODY>
+<h1 align="center">Attack Help</h1>
+<p>By selecting attacks from the attack menu (xss, csrf and, SQL), you can luanch the scanner to run attacks against the target you entered earler. Below the three attacks are explained:</p>
+<ol>
+	<li><FONT size='6'>Cross Site Scripting (XSS):</FONT><p>Cross-Site Scripting (XSS) attacks are a type of injection, in which malicious scripts are injected into otherwise benign and trusted web sites. XSS attacks occur when an attacker uses a web application to send malicious code, generally in the form of a browser side script, to a different end user. Flaws that allow these attacks to succeed are quite widespread and occur anywhere a web application uses input from a user within the output it generates without validating or encoding it.</p>
+
+	<p>An attacker can use XSS to send a malicious script to an unsuspecting user. The end user’s browser has no way to know that the script should not be trusted, and will execute the script. Because it thinks the script came from a trusted source, the malicious script can access any cookies, session tokens, or other sensitive information retained by the browser and used with that site. These scripts can even rewrite the content of the HTML page.</p>
+	<p>Cross-Site Scripting (XSS) attacks occur when:</p>
+	<ul>
+		<li>Data enters a Web application through an untrusted source, most frequently a web request.</li>
+		<li>The data is included in dynamic content that is sent to a web user without being validated for malicious content.</li>
+	</ul>
+</li>
+	<li><FONT size='6'>Cross Site Request Forgery (CSRF):</FONT><p>CSRF is an attack that forces an end user to execute unwanted actions on a web application in which he/she is currently authenticated. With a little help of social engineering (like sending a link via email or chat), an attacker may force the users of a web application to execute actions of the attacker's choosing. A successful CSRF exploit can compromise end user data and operation, when it targets a normal user. If the targeted end user is the administrator account, a CSRF attack can compromise the entire web application.</p>
+
+	<p>CSRF relies on the following:</p>
+	<ol>
+		<li>Web browser behavior regarding the handling of session-related information such as cookies and http authentication information</li>
+		<li>Knowledge by the attacker of valid web application URLs</li>
+		<li>Application session management relying only on information which is known by the browser</li>
+		<li>Existence of HTML tags whose presence cause immediate access to an http[s] resource; for example the image tag img</li>
+	</ol>
+	<p>Points 1, 2, and 3 are essential for the vulnerability to be present, while point 4 facilitates the actual exploitation, but is not strictly required.</p>
+	<p><b>NOTE:</b> if you select the CSRF option from the attacks menu then there will be an aditional step to the scan. This will involve registering 2 users with the target service you specified. One to act as the victim and another to act as the attacker. Due to the nature of CSRF attacks neither an attacker or victim can know if the attack was performed succefully imidatly after it has been performed. The best way to tell is to try and see if the state of the service has been changed after the attack. To assist with this you will be asked to inspect the html and headers for requests and responses.</p>
+	</li>
+	<li><FONT size='6'>Structured Query Language injection (SQLi):</FONT><p>A SQL injection attack consists of insertion or "injection" of a SQL query via the input data from the client to the application. A successful SQL injection exploit can read sensitive data from the database, modify database data (Insert/Update/Delete), execute administration operations on the database (such as shutdown the DBMS), recover the content of a given file present on the DBMS file system and in some cases issue commands to the operating system. SQL injection attacks are a type of injection attack, in which SQL commands are injected into data-plane input in order to effect the execution of predefined SQL commands.</p>
+
+	<p>SQL Injection attacks can be divided into the following three classes:</p>
+	<ul>
+	<li>Inband: data is extracted using the same channel that is used to inject the SQL code. This is the most straightforward kind of attack, in which the retrieved data is presented directly in the application web page.</li>
+	<li>Out-of-band: data is retrieved using a different channel (e.g., an email with the results of the query is generated and sent to the tester).</li>
+	<li>Inferential or Blind: there is no actual transfer of data, but the tester is able to reconstruct the information by sending particular requests and observing the resulting behavior of the DB Server.</li>
+</ul>
+	</li>
+</ol>
+<P>More information is avalable at https://www.owasp.org/index.php/OWASP_Zed_Attack_Proxy_Project</P>
+</BODY>
+</HTML>

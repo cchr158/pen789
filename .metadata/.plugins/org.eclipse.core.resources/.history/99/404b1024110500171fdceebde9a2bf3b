@@ -1,0 +1,18 @@
+package test;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
+
+public class Test {
+
+	public static void main(String[] args){
+		String output = "";
+		try {
+			List<String> f = Files.readAllLines(Paths.get("G:\\the test build\\789Project\\src", "testHTML", ".html"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
