@@ -1,0 +1,53 @@
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server version:        Apache Tomcat/9.0.0.M17
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server built:          Jan 10 2017 20:59:20 UTC
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Server number:         9.0.0.0
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Name:               Windows 8.1
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log OS Version:            6.3
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Architecture:          amd64
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Java Home:             C:\Program Files\Java\jre1.8.0_45
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Version:           1.8.0_45-b14
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log JVM Vendor:            Oracle Corporation
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_BASE:         G:\the test build\apache-tomcat-9.0.0.M17
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log CATALINA_HOME:         G:\the test build\apache-tomcat-9.0.0.M17
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.config.file=G:\the test build\apache-tomcat-9.0.0.M17\conf\logging.properties
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.util.logging.manager=org.apache.juli.ClassLoaderLogManager
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djdk.tls.ephemeralDHKeySize=2048
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.protocol.handler.pkgs=org.apache.catalina.webresources
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.base=G:\the test build\apache-tomcat-9.0.0.M17
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Dcatalina.home=G:\the test build\apache-tomcat-9.0.0.M17
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.startup.VersionLoggerListener.log Command line argument: -Djava.io.tmpdir=G:\the test build\apache-tomcat-9.0.0.M17\temp
+20-Mar-2017 12:39:37.966 INFO [main] org.apache.catalina.core.AprLifecycleListener.lifecycleEvent The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: C:\Program Files\Java\jre1.8.0_45\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\ProgramData\Oracle\Java\javapath;C:\Program Files (x86)\PC Connectivity Solution\;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\HP SimplePass 2011\x64;C:\Program Files (x86)\HP SimplePass 2011\;;C:\Program Files\Broadcom\Broadcom 802.11\Driver;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files (x86)\ATI Technologies\ATI.ACE\Core-Static;C:\Program Files\WIDCOMM\Bluetooth Software\;C:\Program Files\WIDCOMM\Bluetooth Software\syswow64;C:\Program Files\Broadcom\WHL\;C:\Program Files\Broadcom\WHL\syswow64;C:\Program Files\Broadcom\WHL\SysWow64\;C:\Program Files\Broadcom\WHL\SysWow64\syswow64;C:\Program Files (x86)\Intel\Services\IPT\;C:\Program Files\Microsoft\Web Platform Installer\;C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET Web Pages\v1.0\;C:\Program Files\Microsoft SQL Server\110\Tools\Binn\;C:\Program Files (x86)\Windows Kits\8.0\Windows Performance Toolkit\;C:\Program Files (x86)\MiKTeX 2.9\miktex\bin\;C:\Users\colin\AppData\Local\Microsoft\WindowsApps;C:\Users\colin\Downloads\WinPython-64bit-3.4.4.3Qt5\python-3.4.4.amd64;;.
+20-Mar-2017 12:39:38.231 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["http-nio-8080"]
+20-Mar-2017 12:39:38.341 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+20-Mar-2017 12:39:38.341 INFO [main] org.apache.coyote.AbstractProtocol.init Initializing ProtocolHandler ["ajp-nio-8009"]
+20-Mar-2017 12:39:38.356 INFO [main] org.apache.tomcat.util.net.NioSelectorPool.getSharedSelector Using a shared selector for servlet write/read
+20-Mar-2017 12:39:38.356 INFO [main] org.apache.catalina.startup.Catalina.load Initialization processed in 1124 ms
+20-Mar-2017 12:39:38.387 INFO [main] org.apache.catalina.core.StandardService.startInternal Starting service Catalina
+20-Mar-2017 12:39:38.387 INFO [main] org.apache.catalina.core.StandardEngine.startInternal Starting Servlet Engine: Apache Tomcat/9.0.0.M17
+20-Mar-2017 12:39:38.450 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive G:\the test build\apache-tomcat-9.0.0.M17\webapps\bodgeit.war
+20-Mar-2017 12:39:39.247 INFO [localhost-startStop-1] org.apache.jasper.servlet.TldScanner.scanJars At least one JAR was scanned for TLDs yet contained no TLDs. Enable debug logging for this logger for a complete list of JARs that were scanned but no TLDs were found in them. Skipping unneeded JARs during scanning can improve startup time and JSP compilation time.
+20-Mar-2017 12:39:39.810 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive G:\the test build\apache-tomcat-9.0.0.M17\webapps\bodgeit.war has finished in 1,360 ms
+20-Mar-2017 12:39:39.810 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory G:\the test build\apache-tomcat-9.0.0.M17\webapps\ROOT
+20-Mar-2017 12:39:39.856 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory G:\the test build\apache-tomcat-9.0.0.M17\webapps\ROOT has finished in 46 ms
+20-Mar-2017 12:39:39.856 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory G:\the test build\apache-tomcat-9.0.0.M17\webapps\docs
+20-Mar-2017 12:39:39.903 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory G:\the test build\apache-tomcat-9.0.0.M17\webapps\docs has finished in 47 ms
+20-Mar-2017 12:39:39.903 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory G:\the test build\apache-tomcat-9.0.0.M17\webapps\examples
+20-Mar-2017 12:39:40.685 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory G:\the test build\apache-tomcat-9.0.0.M17\webapps\examples has finished in 782 ms
+20-Mar-2017 12:39:40.685 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory G:\the test build\apache-tomcat-9.0.0.M17\webapps\host-manager
+20-Mar-2017 12:39:40.747 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory G:\the test build\apache-tomcat-9.0.0.M17\webapps\host-manager has finished in 62 ms
+20-Mar-2017 12:39:40.747 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory G:\the test build\apache-tomcat-9.0.0.M17\webapps\manager
+20-Mar-2017 12:39:40.810 INFO [localhost-startStop-1] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory G:\the test build\apache-tomcat-9.0.0.M17\webapps\manager has finished in 63 ms
+20-Mar-2017 12:39:40.810 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler [http-nio-8080]
+20-Mar-2017 12:39:40.825 INFO [main] org.apache.coyote.AbstractProtocol.start Starting ProtocolHandler [ajp-nio-8009]
+20-Mar-2017 12:39:40.825 INFO [main] org.apache.catalina.startup.Catalina.start Server startup in 2480 ms
+20-Mar-2017 12:55:55.080 INFO [http-nio-8080-exec-7] org.apache.tomcat.util.http.Parameters.processParameters Invalid chunk starting at byte [0] and ending at byte [1] with a value of [=] ignored
+ Note: further occurrences of Parameter errors will be logged at DEBUG level.
+20-Mar-2017 13:18:25.223 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+20-Mar-2017 13:18:25.223 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+20-Mar-2017 13:18:25.379 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+20-Mar-2017 13:18:25.504 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+20-Mar-2017 13:18:26.254 WARNING [localhost-startStop-2] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [bodgeit] registered the JDBC driver [org.hsqldb.jdbcDriver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+20-Mar-2017 13:18:26.301 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+20-Mar-2017 13:18:26.301 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+20-Mar-2017 13:18:26.301 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+20-Mar-2017 13:18:26.301 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]

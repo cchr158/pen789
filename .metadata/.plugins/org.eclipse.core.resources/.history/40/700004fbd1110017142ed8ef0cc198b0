@@ -1,0 +1,39 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+    public class Solution {
+        public static void main(String[] args) throws IOException {
+        	Scanner in = new Scanner(System.in);
+            final String fileName = System.getenv("OUTPUT_PATH");
+            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
+            String[] res;
+            
+            int _datafeed_size = 0;
+            _datafeed_size = Integer.parseInt(in.nextLine().trim());
+            String[] _datafeed = new String[_datafeed_size];
+            String _datafeed_item;
+            for(int _datafeed_i = 0; _datafeed_i < _datafeed_size; _datafeed_i++) {
+                try {
+                    _datafeed_item = in.nextLine();
+                } catch (Exception e) {
+                    _datafeed_item = null;
+                }
+                _datafeed[_datafeed_i] = _datafeed_item;
+            }
+            
+            res = findPotentialInsiderTraders(_datafeed);
+            for(int res_i=0; res_i < res.length; res_i++) {
+                bw.write(String.valueOf(res[res_i]));
+                bw.newLine();
+            }
+            
+            bw.close();
+        }
+
+        static String[] findPotentialInsiderTraders(String[] datafeed) {
+        	
+        	return null;
+        }        
+    }

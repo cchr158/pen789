@@ -3,6 +3,8 @@ package framesAndPanels;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class Constants {
 	public static final int BUTTON_FONT_SIZE = 24;
@@ -13,15 +15,15 @@ public class Constants {
 	public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
 
 	public static final String DEFUALT_TARGET = "http://localhost:8080/bodgeit/";
-	public static final String DEFUALT_LOCAL_PROXY_ADDRESS = "localhost";
-	public static final int DEFUALT_PORT = 8090;
+	public static final String DEFUALT_LOCAL_PROXY_ADDRESS = proxyAddress();//"localhost";
+	public static final int DEFUALT_PORT = proxyPort();//8090;
 
 	public static enum attacks {
 		XSS_ATTACK, CSRF_ATTACK, SQL_ATTACK, NONE
 	}
 
 	public static final String installDir = Paths.get(System.getProperty("user.dir"), "ZAP_Instal_Files").toString();
-	public static final String runDir = Paths.get(System.getProperty("user.dir"), "ZAP_Runtime_Files").toString();
+	public static final String runDir = runTimePath();//Paths.get(System.getProperty("user.dir"), "ZAP_Runtime_Files").toString();
 	public static final String[] installFileNames = new String[] { "\\db\\zapdb.properties", "\\db\\zapdb.script",
 			"\\filter\\dummy.txt", "\\lang\\Messages.properties", "\\lang\\Messages_ar_SA.properties",
 			"\\lang\\Messages_az_AZ.properties", "\\lang\\Messages_bn_BD.properties",
@@ -134,4 +136,25 @@ public class Constants {
 			"\\scripts\\templates\\targeted\\Targeted default template.zst",
 			"\\scripts\\templates\\websocketfuzzerprocessor\\Fuzzer WebSocket Processor default template.js",
 			"\\session\\" };
+
+	private static String proxyAddress() {
+		return 127+"."+(int)(Math.random()*256)+"."+(int)(Math.random()*256)+"."+(int)(Math.random()*256);
+	}
+
+	private static String runTimePath() {
+		long a = System.currentTimeMillis();
+		String dir = Paths.get(System.getProperty("user.dir"), "ZAP_Runtime_Files").toString()+
+				new SimpleDateFormat("yyyy").format(Calendar.getInstance().getTime())+
+				new SimpleDateFormat("MM").format(Calendar.getInstance().getTime())+
+				new SimpleDateFormat("dd").format(Calendar.getInstance().getTime())+
+				new SimpleDateFormat("HH").format(Calendar.getInstance().getTime())+
+				new SimpleDateFormat("mm").format(Calendar.getInstance().getTime())+
+				new SimpleDateFormat("ss").format(Calendar.getInstance().getTime());
+		long b = System.currentTimeMillis();
+		return dir +="_"+(b-a);
+	}
+
+	private static int proxyPort() {
+		return (int)(Math.random()*65535)+1;
+	}
 }

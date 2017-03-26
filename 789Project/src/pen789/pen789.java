@@ -287,6 +287,7 @@ public class pen789 {
 			pen789.contextName = String.valueOf((int)(Math.random()*Integer.MAX_VALUE+1));
 			Thread.sleep(1000);
 			pen789.api = new ClientApi(Constants.DEFUALT_LOCAL_PROXY_ADDRESS, Constants.DEFUALT_PORT);
+			pen789.api.core.generateRootCA(key);
 			pen789.api.context.newContext(key, contextName);
 			new pen789(Constants.DEFUALT_LOCAL_PROXY_ADDRESS,Constants.DEFUALT_PORT, key, Constants.DEFUALT_TARGET);
 		} catch (Exception e) {

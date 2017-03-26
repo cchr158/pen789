@@ -9,6 +9,7 @@ import java.util.List;
 public class Test {
 
 	public static void main(String[] args){
+		System.out.println(System.currentTimeMillis());
 		String output = "";
 		try {
 			List<String> f = Files.readAllLines(Paths.get("G:\\the test build\\789Project\\src", "AttackHelp"+".html"));

@@ -1,3 +1,5 @@
+anonymizeMessages=true
+disableAutomaticWiringAnalysis=true
 eclipse.preferences.version=1
 resetSendMode=KEEP
 resetSendModeOn=0

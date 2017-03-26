@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextPane;
 //import javax.swing.JTextPane;
 import javax.swing.SwingWorker;
 
@@ -46,8 +48,8 @@ public class CSRF extends SwingWorker<Void, Void>{
 	private List<Pair<String, String, String>> victimBody;
 	private List<Pair<String, String, String>> attackBody;
 	private static final Map<String,String> replaceChars = new HashMap<String, String>();
-	private JFXPanel jfxPanel;
-//	private JTextPane trafficDump;
+//	private JFXPanel jfxPanel;
+	private /*JTextPane*/JTextArea trafficDump;
 	private String contextId;
 	private class Pair<T, K,V>{
 		private K name;
@@ -61,7 +63,7 @@ public class CSRF extends SwingWorker<Void, Void>{
 		public void setV(V v){this.value=v;}
 	}
 	
-	public CSRF(pen789 myPen789, StringBuilder attackOutput, /*JTextPane trafficDump,*/ JFXPanel jfxPanel, URL loginUrl, URL registrationUrl, Map<String, String> users) {
+	public CSRF(pen789 myPen789, StringBuilder attackOutput, /*JTextPane*/JTextArea trafficDump, /*JFXPanel jfxPanel,*/ URL loginUrl, URL registrationUrl, Map<String, String> users) {
 		this.myPen789 = myPen789;
 		this.loginUrl = loginUrl;
 		this.registrationUrl = registrationUrl;
@@ -69,8 +71,8 @@ public class CSRF extends SwingWorker<Void, Void>{
 		this.victimSession = new HashMap<String, String>();
 		this.attackSession = new HashMap<String, String>();
 		this.attackOutput = attackOutput;
-		this.jfxPanel = jfxPanel;
-//		this.trafficDump = trafficDump;
+//		this.jfxPanel = jfxPanel;
+		this.trafficDump = trafficDump;
 		char[] chars = new char[]{' ','$', '&','`',':','<','>','[',']','{','}','"','+','#','%','@','/',';','=',
 				'?','\\','^','|','~','\'',','};
 		for(char i : chars)
@@ -374,12 +376,12 @@ public class CSRF extends SwingWorker<Void, Void>{
 			pen789.api.users.removeUser(this.myPen789.ZAP_API_KEY, this.contextId, this.victimSession.get("userID"));
 			pen789.api.users.removeUser(this.myPen789.ZAP_API_KEY, this.contextId, this.attackSession.get("userID"));
 			Toolkit.getDefaultToolkit().beep();
-			Platform.runLater(() -> {
-				WebView webView = new WebView();
-				webView.getEngine().loadContent(attackOutput.toString());
-				jfxPanel.setScene(new Scene(webView));
-			});
-//			this.trafficDump.setText(this.attackOutput.toString());
+//			Platform.runLater(() -> {
+//				WebView webView = new WebView();
+//				webView.getEngine().loadContent(attackOutput.toString());
+//				jfxPanel.setScene(new Scene(webView));
+//			});
+			this.trafficDump.setText(this.attackOutput.toString());
 			pen789.api.core.runGarbageCollection(this.myPen789.ZAP_API_KEY);
 		} catch (ClientApiException e) {
 			e.printStackTrace();

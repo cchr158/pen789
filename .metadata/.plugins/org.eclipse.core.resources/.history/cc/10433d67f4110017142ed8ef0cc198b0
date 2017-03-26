@@ -1,0 +1,28 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+    public class Solution {
+        public static void main(String[] args) throws IOException {
+        	Scanner scan = new Scanner(System.in);
+            int n = scan.nextInt();
+            int [] a = new int[n];
+            for(int i=0; i<n; i++){
+                a[i]=scan.nextInt();
+            }
+            int count = 0;
+            for(int i=1; i<n; i++){
+                int sum = 0;
+                for(int j=0; j<=n-i; j++){
+                    for(int k=j; k<i+j; k++){
+                        sum += a[k];
+                    }
+                    if(sum<0)
+                        count++;
+                    sum=0;                
+                }
+            }
+            System.out.println(count);
+        }
+    }

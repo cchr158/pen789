@@ -1,0 +1,696 @@
+package pen789;
+
+import java.awt.Toolkit;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.swing.JOptionPane;
+import javax.swing.JTextPane;
+//import javax.swing.JTextPane;
+import javax.swing.SwingWorker;
+
+import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.Connection.Method;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.zaproxy.clientapi.core.ApiResponse;
+import org.zaproxy.clientapi.core.ApiResponseElement;
+import org.zaproxy.clientapi.core.ApiResponseList;
+import org.zaproxy.clientapi.core.ApiResponseSet;
+import org.zaproxy.clientapi.core.ClientApiException;
+
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.web.WebView;
+
+public class CSRF extends SwingWorker<Void, Void>{	
+	
+	private pen789 myPen789;
+	private URL loginUrl;
+	private URL registrationUrl;
+	private URL testUrl;
+	private Map<String, String> users;
+	private Map<String, String> victimSession;
+	private Map<String, String> attackSession;
+	private StringBuilder attackOutput;
+	private List<Pair<String, String, String>> registrationInputs;
+	private List<Pair<String, String, String>> loginInputs;
+	private List<Pair<String, String, String>> victimBody;
+	private List<Pair<String, String, String>> attackBody;
+	private static final Map<String,String> replaceChars = new HashMap<String, String>();
+//	private JFXPanel jfxPanel;
+	private JTextPane trafficDump;
+	private String contextId;
+	private class Pair<T, K,V>{
+		private K name;
+		private V value;
+		private T type;
+		public Pair(T t, K k, V v){
+			this.type = t;
+			this.name = k;
+			this.value = v;
+		}
+		public void setV(V v){this.value=v;}
+	}
+	
+	public CSRF(pen789 myPen789, StringBuilder attackOutput, JTextPane trafficDump, /*JFXPanel jfxPanel,*/ URL loginUrl, URL registrationUrl, Map<String, String> users) {
+		this.myPen789 = myPen789;
+		this.loginUrl = loginUrl;
+		this.registrationUrl = registrationUrl;
+		this.users = users;
+		this.victimSession = new HashMap<String, String>();
+		this.attackSession = new HashMap<String, String>();
+		this.attackOutput = attackOutput;
+//		this.jfxPanel = jfxPanel;
+		this.trafficDump = trafficDump;
+		char[] chars = new char[]{' ','$', '&','`',':','<','>','[',']','{','}','"','+','#','%','@','/',';','=',
+				'?','\\','^','|','~','\'',','};
+		for(char i : chars)
+			replaceChars.put(String.valueOf(i), "%"+Integer.toHexString(i));
+	}
+
+	protected Void doInBackground() throws Exception {
+		this.setProgress(0);
+		this.contextId = ((ApiResponseSet)pen789.api.context.context(pen789.contextName)).getAttribute("id");
+		this.attackOutput.append("CSRF Test Started...<br>\n");
+		this.registrationInputs = this.getInputs(this.registrationUrl,true);//5=15%
+		this.setProgress(Math.min(this.getProgress() + 15, 100));
+		this.loginInputs = this.getInputs(this.loginUrl,true);//5=15%
+		this.setProgress(Math.min(this.getProgress() + 15, 100));
+		if(this.registrationInputs == null || this.loginInputs == null){
+			this.testFailed("82 Test Failed! No inputs on registration or login page.");
+		}
+		this.setupAuthentication();//1.33=4%
+		this.attackOutput .append("Authentication setup...<br>\n");
+		this.setProgress(Math.min(this.getProgress() + 4, 100));
+		this.createUsers();//4=12%
+		this.attackOutput.append("Users created in ZAP database...<br>\n");
+		this.attackOutput.append("============HTTP Requests and Responses============<br>\n<br>\n");
+//		perform spider scan as victim user to reveal authentication space.
+		this.attackOutput.append("==========Perform Spider scan as victim user==========<br>\n"
+				+ "***This uncovers the contents of urls that previously required authentication***<br>\n");
+		this.setProgress(this.spiderScan(this.getProgress(), 0.15));//5=15%
+//		get message that will be used by victim.
+		String testMessage = getmessage();//5=15%
+		this.setProgress(Math.min(this.getProgress() + 15, 100));
+		if(testMessage != null){
+			this.testUrl = new URL(testMessage);
+	//		victim user makes request in victim session.
+			String[] RandR = this.postRequest(this.testUrl, this.victimSession, 
+					this.buildBody(this.victimSession.get("sessionName")));//1=3%
+			this.setProgress(Math.min(this.getProgress() + 3, 100));
+			if(RandR == null){
+				this.testFailed("108 Test Failed! Victim user failed to post request.");
+			}
+			this.attackOutput .append("<br>\n<br>\n============Victim User Post Request============<br>\n<br>\n");
+			this.attackOutput.append(RandR[0]);
+			this.attackOutput .append("<br>\n<br>\n============Victim User Post Response============<br>\n<br>\n");
+			this.attackOutput.append(RandR[2]+"<br>\n");
+			this.attackOutput.append(RandR[1]+"<br>\n");
+	//		make attack request body
+			this.attackOutput.append("***The attacking user will now repeat the request of the victim user"
+					+ " using the victim user session ID. If it is successful then a CSRF attack is possible***<br>\n<br>\n");
+			this.attackBody = this.getInputs(this.testUrl,false);//1=3%
+			this.setProgress(Math.min(this.getProgress() + 3, 100));
+			RandR = this.postRequest(this.testUrl, this.victimSession,
+					this.buildBody(this.attackSession.get("sessionName")));//1=3%
+			this.setProgress(Math.min(this.getProgress() + 3, 100));
+			if(RandR == null){
+				this.attackOutput.append("CSRF attack might be possible. Check request and response pairs above from both victim and attacking users.<br>\n");
+				this.setProgress(100);
+				this.cancel(true);
+			}
+			this.attackOutput.append("<br>\n<br>\n============Attacking User Post Request============<br>\n<br>\n");
+			this.attackOutput.append(RandR[0]);
+			this.attackOutput.append("<br>\n<br>\n============Attacking User Post Response============<br>\n<br>\n");
+			this.attackOutput.append(RandR[2]+"<br>\n");
+			this.attackOutput.append(RandR[1]+"<br>\n");
+			if(RandR[1].contains(this.victimSession.get("username"))){
+				this.attackOutput.append("CSRF attack is likely pressent.<br>\n");
+			}else{
+				this.attackOutput.append("CSRF attack might be possible. Check request and response pairs above from both victim and attacking users.<br>\n");//0.5=1.5%
+			}
+			this.setProgress(Math.min(this.getProgress() + 3, 100));
+		}else{
+			this.testFailed("144 Test Failed! No Post requests found by spider.");
+		}
+		return null;
+	}
+	
+	private String buildBody(String sessionName) {
+		StringBuilder body = new StringBuilder();
+		Map<String, String> session = sessionName.equals("victimSession")?this.victimSession:this.attackSession;
+		for(Pair<String, String, String> p : sessionName.equals("victimSession")?this.victimBody:this.attackBody){
+			body.append(p.name);
+			body.append('=');
+			if(p.type != null && !p.type.equals("Text")){
+				if(p.name.equals(session.get("username")) && p.type.equals("Hidden")){
+					body.append(sessionName.equals("victimSession")?session.get("username"):this.attackSession.get("username"));
+				}else{
+					body.append(p.value==null?"ZAPZAP":p.value);
+				}
+			}else{
+				if(sessionName.equals("victimSession")){
+					body.append(this.charReplacment("Im the victim user: "+session.get("username"),"%"));
+				}else{
+					body.append(this.charReplacment("Im the attacking user: "+this.attackSession.get("username")
+					+" pretending to be user: "+session.get("username"),"%"));
+				}
+			}
+			body.append('&');
+		}
+		body.deleteCharAt(body.length()-1);
+		return body.toString();
+	}
+
+	private List<Pair<String, String, String>> getInputs(URL url, boolean show) {
+		try{
+			List<Pair<String, String, String>> temp = new ArrayList<Pair<String, String, String>>();
+			String[] response = this.getRequest(url, this.victimSession);
+			Document doc = Jsoup.parse(response[1]);
+			if(show){
+				this.attackOutput.append("\n\n============Victim User GET Response============<br>\n\n");
+				this.attackOutput.append(response[0]+"<br>\n");
+				this.attackOutput.append(doc.toString()+"<br>\n");
+			}
+			for(String inputs : new String[]{"input", "textarea"}){
+				ArrayList<Element> attributes = doc.select(inputs);
+				String[] types = new String[]{"Date","Datetime-local","Email","File","Hidden","Month","Number", "Password","Search","Tel",
+						"Text","Time","Url","Week"};
+				for(Element e : attributes){
+					String type = e.attr("TYPE");
+					if(type.isEmpty())
+						type = e.attr("type");
+					if(type.isEmpty())
+						type = e.attr("Type");
+					String tmp = "Name";
+					String name = e.attr(tmp);
+					if(name.isEmpty())
+						name = e.attr(tmp.toLowerCase());
+					if(name.isEmpty())
+						name = e.attr(tmp.toUpperCase());
+					String id = e.attr(tmp="Id");
+					if(id.isEmpty())
+						id = e.attr(id.toLowerCase());
+					if(id.isEmpty())
+						id = e.attr(id.toUpperCase());
+					String value = e.attr(tmp="Value");
+					if(value.isEmpty())
+						value = e.attr(tmp.toLowerCase());
+					if(value.isEmpty())
+						value = e.attr(tmp.toUpperCase());
+					if(!type.isEmpty()){
+						outerLoop:
+						for(String s : types){
+							if(type.equalsIgnoreCase(s)){
+								if(!(name.isEmpty() && id.isEmpty())){
+									switch(s){
+									case "Date":
+										temp.add(new Pair<String, String, String>(types[0], name.isEmpty()?id:name,
+												value.isEmpty()?"1970-01-01":value));
+										break outerLoop;
+									case "Datetime-local":
+										temp.add(new Pair<String, String, String>(types[1], name.isEmpty()?id:name,
+												value.isEmpty()?"1970-01-01T00:00":value));
+										break outerLoop;
+									case "Email":
+										temp.add(new Pair<String, String, String>(types[2], name.isEmpty()?id:name, 
+												value.isEmpty()?"thisIsAnEmailAddress@trustMe.com":value));
+										break outerLoop;
+									case "File":
+										temp.add(new Pair<String, String, String>(types[3], name.isEmpty()?id:name, 
+												value.isEmpty()?"ZAP.txt":value));
+										break outerLoop;
+									case "Hidden":
+										temp.add(new Pair<String, String, String>(types[4], name.isEmpty()?id:name,
+												value.isEmpty()?"I-am-hidden":value));
+										break outerLoop;
+									case "Month":
+										temp.add(new Pair<String, String, String>(types[5], name.isEmpty()?id:name, 
+												value.isEmpty()?"1970-01":value));
+										break outerLoop;
+									case "Number":
+										temp.add(new Pair<String, String, String>(types[6], name.isEmpty()?id:name,
+												value.isEmpty()?String.valueOf(Integer.MAX_VALUE):value));
+										break outerLoop;
+									case "Password":
+										temp.add(new Pair<String, String, String>(types[7], name.isEmpty()?id:name, null));
+										break outerLoop;
+									case "Search":
+										temp.add(new Pair<String, String, String>(types[8], name.isEmpty()?id:name, 
+												value.isEmpty()?"looking for CSRF's":value));
+										break outerLoop;
+									case "Tel":
+										temp.add(new Pair<String, String, String>(types[9], name.isEmpty()?id:name, 
+												value.isEmpty()?"+6499999999":value));
+										break outerLoop;
+									case "Time":
+										temp.add(new Pair<String, String, String>(types[11], name.isEmpty()?id:name, 
+												value.isEmpty()?"00:00":value));
+										break outerLoop;
+									case "Url":
+										temp.add(new Pair<String, String, String>(types[12], name.isEmpty()?id:name, 
+												value.isEmpty()?"http://www.example.com":value));
+										break outerLoop;
+									case "Week":
+										temp.add(new Pair<String, String, String>(types[14], name.isEmpty()?id:name, 
+												value.isEmpty()?"1970-W01":value));
+										break outerLoop;
+									case "Text":
+									default:
+										temp.add(new Pair<String, String, String>(types[10], name.isEmpty()?id:name, 
+												value.isEmpty()?"ZAP test for CSRF.":value));
+										break outerLoop;
+									}
+								}
+							}
+						}
+					}else{
+						temp.add(new Pair<String, String, String>(types[10], name.isEmpty()?id:name, 
+								value.isEmpty()?"ZAP test for CSRF.":value));
+					}
+				}
+			}
+			return temp.size()==0?null:temp;
+		}catch (Exception e) {
+		    e.printStackTrace();
+		    this.testFailed("254 Test Failed! Failed to get inputs for: "+url.toString());
+		    return null;
+		}
+	}
+
+	private String[] getRequest(URL url, Map<String, String> session){
+		try{
+//			build http request header.
+			HttpURLConnection c = (HttpURLConnection)url.openConnection();
+			c.setRequestMethod("GET");
+			c.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0");
+			c.setRequestProperty("Accept-Language", "en-GB,en;q=0.5");
+			c.setRequestProperty("Referer", url.toString());
+			c.setRequestProperty("Connection", "keep-alive");
+			c.setRequestProperty("Upgrade-Insecure-Requests", "1");
+			c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			c.setRequestProperty("Host", url.getAuthority());
+			c.setRequestProperty("Cache-Control","no-cache");
+//			Get Response.
+		    String[] response = new String[]{"",""};
+		    for(String i: c.getHeaderFields().keySet()){
+		    	for(String j: c.getHeaderFields().get(i)){
+		    		response[0] += i+": "+j+"\n<br>";
+		    		if(i!=null && i.equalsIgnoreCase("set-cookie")){
+//		    			TODO finish this.
+		    			System.out.println(i+": "+j+"\n<br>");
+		    		}
+		    	}
+		    }
+		    BufferedReader in = new BufferedReader(
+			        new InputStreamReader(c.getInputStream()));
+			String inputLine;
+			StringBuffer sb = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				sb.append(inputLine);
+			}
+			response[1] = Jsoup.parse(sb.toString()).toString();
+		    if(c.getResponseCode() == 200){
+		    	return response;
+		    }else{return null;}
+		} catch (Exception e) {
+		    e.printStackTrace();
+		    return null;
+		  }
+	}
+	
+	private String getmessage() throws MalformedURLException {
+		try {
+			List<ApiResponse> messages = ((ApiResponseList)pen789.api.core.messages(this.myPen789.target, null, null)).getItems();
+			for(ApiResponse resp : messages){
+				String[] messageHeader = ((ApiResponseSet)resp).getAttribute("requestHeader").split(" ");
+				if(messageHeader[0].equals("POST") && !messageHeader[1].equals(this.loginUrl.toString()) &&
+						!messageHeader[1].equals(this.registrationUrl.toString())){
+					this.victimBody = this.getInputs(new URL(messageHeader[1]),true);
+					return messageHeader[1];
+				}
+			}
+		} catch (ClientApiException e) {
+			e.printStackTrace();
+			this.testFailed("272 Test Failed! Couldn't aquire messages from ZAP API.");
+		}
+		return null;
+	}
+	
+	private int spiderScan(int progress, double d) {
+		try {
+			pen789.api.spider.setOptionMaxDepth(this.myPen789.ZAP_API_KEY, 10);
+			String scanid = ((ApiResponseElement) pen789.api.spider.scanAsUser(this.myPen789.ZAP_API_KEY, contextId,
+					this.victimSession.get("userID"), this.myPen789.target, null, "true", null)).getValue();
+			Thread.sleep(2000);
+			int temp = progress;
+			while(temp + d*100 > progress){
+				this.attackOutput.append("task: "+(Integer.parseInt(((ApiResponseElement) 
+						pen789.api.spider.status(scanid)).getValue()))+"%<br>\n");
+				progress = (int) (temp + Double.parseDouble(((ApiResponseElement) pen789.api.spider.status(scanid)).getValue())*d);
+				this.setProgress(Math.min(progress, 100));
+				Thread.sleep(5000);
+			}
+			Thread.sleep(2000);
+		} catch (ClientApiException | InterruptedException e) {
+			e.printStackTrace();
+			this.testFailed("294 Test Failed! Spider scan failed.");
+		}
+		return Math.min(progress, 100);
+	}
+
+	protected void done(){
+		//FIXME remove all JavaFX components and replace with Swing components only!
+		try {
+			pen789.api.users.removeUser(this.myPen789.ZAP_API_KEY, this.contextId, this.victimSession.get("userID"));
+			pen789.api.users.removeUser(this.myPen789.ZAP_API_KEY, this.contextId, this.attackSession.get("userID"));
+			Toolkit.getDefaultToolkit().beep();
+//			Platform.runLater(() -> {
+//				WebView webView = new WebView();
+//				webView.getEngine().loadContent(attackOutput.toString());
+//				jfxPanel.setScene(new Scene(webView));
+//			});
+			this.trafficDump.setText(this.attackOutput.toString());
+			pen789.api.core.runGarbageCollection(this.myPen789.ZAP_API_KEY);
+		} catch (ClientApiException e) {
+			e.printStackTrace();
+		}
+		JOptionPane.showMessageDialog(null, "Test Complete.");
+	}
+
+	private String[] postRequest(URL url, Map<String, String> session, String body){
+		try{
+//			build http request header.
+			Connection connection = Jsoup.connect(url.toString()).method(Method.POST)
+					.header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0")
+					.header("Accept-Language", "en-GB,en;q=0.5")
+					.header("Referer", url.toString())
+					.header("Connection", "keep-alive")
+					.header("Upgrade-Insecure-Requests", "1")
+					.header("Content-Type", "application/x-www-form-urlencoded")
+					.header("Host", url.getAuthority())
+					.header("Cache-Control","no-cache")
+					.header("Content-Length", String.valueOf(body.getBytes().length));
+			if(session.get("token")!=null && session.get("tokenValue")!=null){
+					connection.cookie(session.get("token")==null?"null":session.get("token"),
+							session.get("tokenValue")==null?"":session.get("tokenValue"));
+			}
+			connection.requestBody(body);
+//			Send request.
+			String request = "POST: "+url.toString()+"\n<br>";
+			for(String s: connection.request().headers().keySet()){
+				request += s+": "+connection.request().headers().get(s)+"\n";
+			}
+			request += connection.request().requestBody()+"\n<br>";
+			connection.execute();
+//			Get Response.
+		    String[] response = new String[]{"",""};
+		    response[0] = connection.response().statusMessage()+": "+connection.response().statusCode()+"\n<br>";
+		    for(String key : connection.response().headers().keySet()){
+		    	response[0] += key+": "+connection.response().headers().get(key)+"\n<br>";
+		    }
+		    for(String token : connection.response().cookies().keySet()){
+		    	response[0] += "Set-Cookie: "+token+"="+connection.response().cookies().get(token)+"\n<br>";
+		    	session.put(token, connection.response().cookies().get(token));
+		    }
+		    response[1] = Jsoup.parse(connection.response().body()).toString();
+		    if(connection.response().statusCode() == 200){
+		    	return new String[]{request, response[1], response[0]};//request Headers+body, response body, response header.
+		    }else{return null;}
+		} catch (Exception e) {
+		    e.printStackTrace();
+		    return null;
+		  }
+	}
+	
+	/*private void setRequestHeaders(Connection connection, URL path, String cookieName, String cookieValue,
+			String contentLength, String requestMethod) 
+			throws ProtocolException, ClientApiException {
+		connection.method(requestMethod.equals("POST")?Connection.Method.POST:Connection.Method.GET)
+		.data("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0")
+		.data("Accept-Language", "en-GB,en;q=0.5")
+		.data("Referer", path.toString())
+		.data("Connection", "keep-alive")
+		.data("Upgrade-Insecure-Requests", "1")
+		.data("Content-Type", "application/x-www-form-urlencoded")
+		.data("Host", path.getAuthority())
+		.data("Cache-Control","no-cache");
+		if(!(cookieName==null || cookieValue==null)){
+			connection.cookie(cookieName==null?"null":cookieName, cookieValue==null?"null":cookieValue);
+		}
+		if(requestMethod.equals("POST")){
+			connection.data("Content-Length", contentLength);
+		}
+	}*/
+
+	/*private String sendRequest(Connection.Request connection, String body, String cookie) throws IOException {
+	    StringBuilder request = new StringBuilder();
+	    request.append("POST"+": ");
+	    request.append(connection.url().toString()+"<br>\n");
+	    request.append("User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0<br>\n");
+	    request.append("Accept-Language: en-GB,en;q=0.5<br>\n");
+	    request.append("Referer: "+ connection.toString()+"<br>\n");
+	    request.append("Connection: keep-alive<br>\n");
+	    request.append("Upgrade-Insecure-Requests: 1<br>\n");
+	    request.append("Content-Type: application/x-www-form-urlencoded<br>\n");
+	    if(connection.method().equals(Connection.Method.POST)){
+	    	request.append("Cookie: "+ cookie+"<br>\n");
+			request.append("Content-Length: " + body.getBytes().length+"<br>\n");
+		}
+	    request.append("Host: "+connection.url().getAuthority()+"\n<br>");
+	    request.append(body);
+	    return request.toString();
+	}*/
+	
+	/*private String[] getResponse(Connection.Response connection, Map<String, String> session) throws IOException {
+		StringBuilder responseHead = new StringBuilder();
+		Map<String, String> header;
+		responseHead.append(connection.statusMessage()+": "+connection.statusCode()+"\n<br>");
+	    for(String feild : (header=connection.headers()).keySet()){
+	    	responseHead.append(feild+": ");
+	    	responseHead.append(header.get(feild)v+" ");
+	    	responseHead.append("<br>\n");
+	    }
+	    for(String k : connection.cookies().keySet()){
+	    	responseHead.append("Set-Cookie: ");
+	    	responseHead.append(k+"=");
+	    	responseHead.append(connection.cookies().get(k)+"\n<br>");
+//	    	FIXME test this line of code to see if it fixes cookie problem.
+	    	session.put(k, connection.cookies().get(k));
+	    }
+	    return new String[]{responseHead.toString(), Jsoup.parse(connection.body()).toString()};
+	}*/
+
+	private String[] loginOrRegisterUser(String username, String password1, String password2, URL loginURL, Map<String, String> session){
+//		Sanitise inputs.
+		username = this.charReplacment(username,"%");
+		password1 = this.charReplacment(password1,"%");
+		if(password2 != null)
+			password2 = this.charReplacment(password2,"%");
+		try{
+//			Connection connection = Jsoup.connect(loginURL.toString());
+			StringBuilder body = new StringBuilder();
+			for(Pair<String, String, String> p : password2 != null? this.registrationInputs: this.loginInputs){
+				if(p.value != null)
+					p.setV(this.charReplacment(p.value,""));
+				body.append(p.name);
+				body.append('=');
+				if(p.type.equals("Text")){
+					switch(p.name){
+					case "username":
+					case "name":
+						body.append(username);
+						break;
+					default:
+						body.append(p.value);
+						break;
+					}
+				}else if(p.type.equals("Password")){
+					body.append(password1);
+				}else{
+					body.append(p.value);
+				}
+				body.append('&');
+			}
+			body.deleteCharAt(body.length()-1);
+			String[] temp = this.postRequest(loginURL, session, body.toString());
+//			this.setRequestHeaders(connection, loginURL, session.get("token"),/*+"="+*/session.get("tokenValue"),
+//					Integer.toString(body.toString().getBytes().length), "POST");
+//			Send request.
+//			String request = sendRequest(connection.request(), body.toString(), session.get("token")+"="+session.get("tokenValue"));
+//			connection.requestBody(body.toString()).execute();
+//			Get Response.
+//			String[] response = getResponse(connection.response(), session);
+			if(temp != null){
+				return temp;//new String[]{request, response[1], response[0]};//request Headers+body, response body, response header.
+			}else{return null;}
+		} catch (Exception e) {
+		    e.printStackTrace();
+		    return null;
+		  }
+	}
+	
+	private void setupSessions(String victimToken, String victimTokenValue, String attackToken, String attackTokenValue){
+		try{
+//			get token type used by this site.
+			List<ApiResponse> arl = ((ApiResponseList) pen789.api.httpSessions.sessionTokens(this.myPen789.target)).getItems();
+			String token = "";
+			if(!arl.isEmpty()){
+				token = ((ApiResponseElement)arl.get(0)).getValue();
+			}
+//			session 1
+			this.victimSession.put("sessionName", "victimSession");
+			this.victimSession.put("token", victimToken==null?token:victimToken);
+			this.victimSession.put("tokenValue", victimTokenValue==null?randomString(32):victimTokenValue);
+//			session 2
+			this.attackSession.put("sessionName", "attackSession");
+			this.attackSession.put("token", attackToken==null?token:attackToken);
+			this.attackSession.put("tokenValue", attackTokenValue==null?randomString(32):attackTokenValue);
+		} catch (ClientApiException e) {
+			e.printStackTrace();
+			this.testFailed("Test Failed! Could not complete set up of sessions.");
+		}
+	}
+	private void setupAuthentication(){
+		try {
+			StringBuilder params = new StringBuilder();
+			params.append("loginUrl=");
+			params.append(this.loginUrl.toString());
+			params.append('&');
+			params.append("loginRequestData=");
+			params.append(charReplacment("username={%username%}&password={%password%}","{}="));
+			pen789.api.authentication.setAuthenticationMethod(this.myPen789.ZAP_API_KEY, contextId, "formBasedAuthentication",
+					params.toString());
+			pen789.api.authentication.setLoggedInIndicator(this.myPen789.ZAP_API_KEY, contextId, "^(.*?(\bLogout\b)[^$]*)$");
+			pen789.api.authentication.setLoggedOutIndicator(this.myPen789.ZAP_API_KEY, contextId, "^(.*?(\bLogin\b)[^$]*)$");
+		} catch (ClientApiException e) {
+			e.printStackTrace();
+			this.testFailed("508 Test Failed! Could not complete set up of authentication methods.");
+		}
+	}
+	
+	private void createUsers(){
+		try {
+			int i=0;
+			String victimToken = null;
+			String victimTokenValue = null;
+			String attackToken = null;
+			String attackTokenValue = null;
+			for(String username : this.users.keySet()){
+				String userId = ((ApiResponseElement)pen789.api.users.newUser(this.myPen789.ZAP_API_KEY, contextId, username)).getValue();
+				StringBuilder params = new StringBuilder();
+				params.append("username=");
+				params.append(charReplacment(username,"%"));
+				params.append("&password=");
+				params.append(charReplacment(this.users.get(username),"%"));
+				pen789.api.users.setAuthenticationCredentials(this.myPen789.ZAP_API_KEY, contextId, userId, params.toString());
+				pen789.api.users.setUserEnabled(this.myPen789.ZAP_API_KEY, contextId, userId, "true");
+//				register and login users with site.
+				if(i++%2==0){
+					if(getRegistrationOrLoginCookies(this.victimSession, username, userId, "Set-Cookie", "register", null)==null)
+						this.testFailed("532 Test Failed! couldn't register user: "+username);
+					this.setProgress(Math.min(this.getProgress() + 6, 100));
+					String[] temp = getRegistrationOrLoginCookies(this.victimSession, username, userId, "Set-Cookie", "login", null);
+					if(temp==null)this.testFailed("535 Test Failed! Could not log in as "+username);
+					victimToken = temp[0].replaceFirst(" ", "");
+					victimTokenValue = temp[1];
+					this.attackOutput.append("<br>\n============Victim User Login Request============<br>\n<br>\n");
+					this.attackOutput.append(temp[2]+"<br>\n");
+					this.attackOutput.append("<br>\n============Victim User Login Response============<br>\n<br>\n");
+					this.attackOutput.append(temp[3]+"<br>\n");
+					this.setProgress(Math.min(this.getProgress() + 3, 100));
+				}else{
+					if(getRegistrationOrLoginCookies(this.attackSession, username, userId, "Set-Cookie", "register", null)==null)
+						this.testFailed("547 Test Failed! couldn't register user: "+username);
+					this.setProgress(Math.min(this.getProgress() + 6, 100));
+					String[] temp = getRegistrationOrLoginCookies(this.attackSession, username, userId, "Set-Cookie", "login", null);
+					if(temp==null)this.testFailed("550 Test Failed! Could not log in as "+username);
+					attackToken = temp[0].replaceFirst(" ", "");
+					attackTokenValue = temp[1];
+					this.attackOutput.append("<br>\n============Attacking User Login Request============<br>\n<br>\n");
+					this.attackOutput.append(temp[2]+"<br>\n");
+					this.attackOutput.append("<br>\n============Attacking User Login Response============<br>\n<br>\n");
+					this.attackOutput.append(temp[3]+"<br>\n");
+					this.setProgress(Math.min(this.getProgress() + 3, 100));
+				}
+			}
+			pen789.api.users.setUserEnabled(this.myPen789.ZAP_API_KEY, contextId, this.attackSession.get("userID"), "true");
+			pen789.api.users.setUserEnabled(this.myPen789.ZAP_API_KEY, contextId, this.victimSession.get("userID"), "true");
+			pen789.api.forcedUser.setForcedUserModeEnabled(this.myPen789.ZAP_API_KEY, true);
+			pen789.api.forcedUser.setForcedUser(this.myPen789.ZAP_API_KEY, contextId, this.victimSession.get("userID"));
+			this.setupSessions(victimToken, victimTokenValue, attackToken, attackTokenValue);//2=6%
+			this.attackOutput.append("Sessions created...<br>\n");
+			this.setProgress(Math.min(this.getProgress() + 6, 100));
+		} catch (ClientApiException e) {
+			e.printStackTrace();
+			this.testFailed("569 Test Failed! failure occured while creating and registering users.");
+		}
+	}
+	private void testFailed(String string) {
+		JOptionPane.showMessageDialog(null, string);
+		this.setProgress(100);
+		if(!this.cancel(true)){
+			try {
+				this.finalize();
+			} catch (Throwable e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	private String[] getRegistrationOrLoginCookies(Map<String, String> session, String username, String userId,
+			String lookfor, String action, String response) {
+		session.put("username", username);
+		session.put("password", this.users.get(username));
+		session.put("userID", userId);
+		String[] randr = null;
+		if(action.equals("register")){
+			randr = this.loginOrRegisterUser(session.get("username"), session.get("password"),
+				session.get("password"), this.registrationUrl, session);
+		}else if(action.equals("login")){
+			randr = this.loginOrRegisterUser(session.get("username"), session.get("password"), null, this.loginUrl, session);
+		}
+		if(randr != null && (randr[2].contains(lookfor) || randr[2].contains(lookfor.toLowerCase()) || 
+				randr[2].contains(lookfor.toUpperCase()))){
+			int start = (randr[2].indexOf(lookfor)==-1?randr[2].indexOf(lookfor.toLowerCase())==-1?randr[2].indexOf(lookfor.toUpperCase()):
+				randr[2].indexOf(lookfor.toLowerCase()):randr[2].indexOf(lookfor))+lookfor.length()+1;
+			int end = randr[2].indexOf('\n', start);
+			String cookie = randr[2].substring(start, end).replaceAll(" ", "");
+			int middle = cookie.indexOf('=');
+			String[] str = new String[]{cookie.substring(0, middle), cookie.substring(middle+1), randr[0],randr[2]+"\n"+randr[1]};
+			return str;
+		}
+		return null;
+	}
+	
+	private String charReplacment(String str, String ignor){
+		String temp = str;
+		for(String key: replaceChars.keySet()){
+			if(temp.contains(key) && !ignor.contains(key))
+				temp=temp.replaceAll(key, replaceChars.get(key));
+		}
+		return temp;
+	}
+	private String randomString(int length){
+		StringBuilder sb = new StringBuilder();
+		for(int i=0; i<length; i++){
+			char j;
+			if(((int)(100*Math.random()+1))<29){
+				j = (char)((int)(Math.random()*10+48));
+			}else{
+				j = (char)((int)(Math.random()*26+65));
+			}
+			sb.append(j);
+		}
+		return sb.toString();
+	}
+}

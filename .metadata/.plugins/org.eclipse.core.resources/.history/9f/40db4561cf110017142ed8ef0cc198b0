@@ -1,0 +1,113 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+    public class Solution {
+        public static void main(String[] args) {
+        	Scanner in = new Scanner(System.in);
+            final String fileName = System.getenv("OUTPUT_PATH");
+            BufferedWriter bw = new BufferedWriter(new FileWriter(fileName));
+            String[] res;
+            
+            int _datafeed_size = 0;
+            _datafeed_size = Integer.parseInt(in.nextLine().trim());
+            String[] _datafeed = new String[_datafeed_size];
+            String _datafeed_item;
+            for(int _datafeed_i = 0; _datafeed_i < _datafeed_size; _datafeed_i++) {
+                try {
+                    _datafeed_item = in.nextLine();
+                } catch (Exception e) {
+                    _datafeed_item = null;
+                }
+                _datafeed[_datafeed_i] = _datafeed_item;
+            }
+            
+            res = findPotentialInsiderTraders(_datafeed);
+            for(int res_i=0; res_i < res.length; res_i++) {
+                bw.write(String.valueOf(res[res_i]));
+                bw.newLine();
+            }
+            
+            bw.close();
+        }
+
+        class Stock{
+            int day;
+            double price;
+            
+            public Stock(int d, double p){
+                this.day = d;
+                this.price = p;
+            }
+        }
+
+        class Trade{
+            int day;
+            String name;
+            String type;
+            double amount;
+            double price;
+            
+            public Trade(int d, String n, String t, double a, Stock s){
+                this.day = d;
+                this.name = n;
+                this.type = t;
+                this.amount = a;
+                this.price = s.price*a;
+            }
+        }
+
+//        Stock stock;
+        static ArrayList<Trade> trades = new ArrayList<Trade>();
+
+        static String[] findPotentialInsiderTraders(String[] datafeed) {
+            Set<String> result = new HashSet<String>();
+            String [] temp = datafeed[0].split("|");
+            Stock biggin = new Stock(Integer.parseInt(temp[0]),Double.parseDouble(temp[1]));
+            Stock end = null;
+            for(int i=1; i<datafeed.length; i++){
+                String[] strArray = datafeed[i].split("|");
+                Stock currentStock = null;
+                if(strArray.length==2){
+                    currentStock = new Stock(Integer.parseInt(strArray[0]),Double.parseDouble(strArray[1]));
+                    if(currentStock.price != biggin.price){
+                        ArrayList<String> al = compareTrades(currentStock, currentStock.price-biggin.price);
+                        for(String ss : al){
+                            result.add(ss);
+                        }
+                    }
+                }else if(strArray.length==4){
+                    trades.add(new Trade(Integer.parseInt(strArray[0]),strArray[1], strArray[2], Double.parseDouble(strArray[3]),currentStock));
+                }
+                String[] sss = new String[result.size()];
+                int count =0;
+                for(String ii : result){
+                	sss[count] = ii;
+                	count++;
+                	
+                }
+                return sss;
+            }
+
+        }
+
+        static  ArrayList<String> compareTrades(Stock currentStock, double priceDiff){
+            ArrayList<String> traders = new ArrayList<String>();
+            for(Trade t: trades){
+                if(t.day-currentStock.day<=3){
+                    if(priceDiff>0 && t.type.equals("BUY")){
+                        if(t.amount*priceDiff>=500000){
+                            traders.add(t.name);
+                        }
+                    }else if(priceDiff<0 && t.type.equals("SELL")){
+                        if(t.amount*priceDiff<=-500000){
+                            traders.add(t.name);
+                        }
+                    }
+                }
+            }
+            return traders;
+        }
+        
+    }

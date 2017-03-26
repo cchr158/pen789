@@ -27,8 +27,11 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 //import javax.swing.JTextPane;
+import javax.swing.JTextPane;
+import javax.swing.text.DefaultCaret;
 
 import javafx.embed.swing.JFXPanel;
 import pen789.CSRF;
@@ -40,8 +43,8 @@ public class CSRFOutput {
 		private JPanel panel;
 		private pen789 myPen789;
 		private StringBuilder attackOutput;
-		private JFXPanel jfxPanel;
-//		private JTextPane trafficDump;
+//		private JFXPanel jfxPanel;
+		private /*JTextPane*/JTextArea trafficDump;
 		private JButton okButton;
 		private JTextArea title;
 		private CSRF csrf;
@@ -59,10 +62,10 @@ public class CSRFOutput {
             this.progressBar.setPreferredSize(new Dimension(this.csrfFrame.getWidth(), Constants.LABLE_FONT_SIZE));
             this.attackOutput = new StringBuilder();
             this.panel = new JPanel();
-            this.jfxPanel = new JFXPanel();
-            this.jfxPanel.setPreferredSize(new Dimension(this.csrfFrame.getWidth(), 4*this.csrfFrame.getHeight()/5));
-//            this.trafficDump = new JTextPane();
-//            this.trafficDump.setPreferredSize(new Dimension(this.csrfFrame.getWidth(), 4*this.csrfFrame.getHeight()/5));
+//            this.jfxPanel = new JFXPanel();
+//            this.jfxPanel.setPreferredSize(new Dimension(this.csrfFrame.getWidth(), 4*this.csrfFrame.getHeight()/5));
+            this.trafficDump = new JTextArea(30,80);/* new JTextPane();*/
+            this.trafficDump.setPreferredSize(new Dimension(this.csrfFrame.getWidth(), 4*this.csrfFrame.getHeight()/5));
             this.okButton = new JButton("OK");
             this.okButton.addActionListener(this.myPen789.cancleButtonListerner);
             this.okButton.setEnabled(false);
@@ -76,7 +79,7 @@ public class CSRFOutput {
         	this.saveOutputButton.setEnabled(false);
             this.showResults();            
             this.myPen789.nextFrame(csrfFrame);
-            this.csrf = new CSRF(myPen789, this.attackOutput, /*this.trafficDump,*/ this.jfxPanel, loginUrl, registerUrl, users);
+            this.csrf = new CSRF(myPen789, this.attackOutput, this.trafficDump,/* this.jfxPanel,*/ loginUrl, registerUrl, users);
         	csrf.addPropertyChangeListener(new PropertyChangeListener(){
 				public void propertyChange(PropertyChangeEvent arg0) {
 					if(arg0.getPropertyName().equals("progress")){
@@ -145,8 +148,12 @@ public class CSRFOutput {
 //    		set up and add output text area.
     		c.anchor = GridBagConstraints.CENTER;
     		c.gridy = GridBagConstraints.RELATIVE;
-    		this.panel.add(this.jfxPanel,c);
-//    		this.panel.add(this.trafficDump, c);
+//    		this.panel.add(this.jfxPanel,c);
+    		this.trafficDump.setMargin(new Insets(5,5,5,5));
+    		this.trafficDump.setEditable(false);
+    		DefaultCaret caret = (DefaultCaret)this.trafficDump.getCaret();
+    		caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+    		this.panel.add(new JScrollPane(this.trafficDump), c);
 //    		add ok button.
     		c.fill = GridBagConstraints.NONE;
     		c.anchor = GridBagConstraints.CENTER;

@@ -1,0 +1,34 @@
+import java.io.*;
+import java.util.*;
+import java.text.*;
+import java.math.*;
+import java.util.regex.*;
+    public class Solution {
+        public static void main(String[] args) throws IOException {
+        	 Scanner in = new Scanner(System.in);
+             int arr[][] = new int[6][6];
+             for(int i=0; i < 6; i++){
+                 for(int j=0; j < 6; j++){
+                     arr[i][j] = in.nextInt();
+                 }
+             }
+             int sum=0;
+             int max=0;
+             for(int i=0; i < 3; i+=1){
+                 for(int j=0; j < 3; j+=1){
+                     for(int k=i;k<i+3;k++){
+                         for(int l=j; l<j+3; l++){
+                             if(k==i+1){
+                                 sum += arr[k][j+1];
+                                 break;
+                             }
+                             sum+=arr[k][l];
+                         }
+                     }
+                     max = max<sum?sum:max;
+                     sum=0;
+                 }
+             }
+             System.out.println(max);
+        }
+    }
