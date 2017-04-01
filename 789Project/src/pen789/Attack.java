@@ -58,7 +58,8 @@ public class Attack extends SwingWorker<Void, Void> {
 			pen789.api.context.includeInContext(this.myPen789.ZAP_API_KEY, pen789.contextName, this.myPen789.target+".*");
 			if (this.numberOfScanes != 0)
 				output.append(
-						"Start: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + "\n");
+						"Start: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + "\n"
+						+this.myPen789.target+"\n");
 			if (this.spiderScane)
 				this.myPen789.spiderScan(this);
 			if (this.aJaxSpiderScane)
@@ -141,25 +142,16 @@ public class Attack extends SwingWorker<Void, Void> {
 	}
 
 	private void appendText(Alert alert) {
-		output.append("\nThreat: " + alert.getAlert());
-		output.append("\nThreat level: " + alert.getRisk());
-		output.append("\nThreat URI: " + alert.getUrl());
+		String s = "";
+		if(!(s=alert.getAlert()).isEmpty())output.append("\nThreat: " + alert.getAlert());
+		if(!(s=String.valueOf(alert.getRisk())).isEmpty())output.append("\nThreat level: " + alert.getRisk());
+		if(!(s=alert.getUrl()).isEmpty())output.append("\nThreat URI: " + alert.getUrl());
+		if(!(s=alert.getAttack()).isEmpty())output.append("\nThreat Attack: " + alert.getAttack());
+		if(!(s=alert.getEvidence()).isEmpty())output.append("\nThreat Evidence: " + alert.getEvidence());
+		output.append("\n");
 	}
 
-	private void displayFullDetails() {
-//		FIXME: throws null pointer exception.
-		JFrame testFrame = new JFrame("Test");
-		testFrame.addWindowListener(this.myPen789.exitListener);
-		JFXPanel jfxPanel = new JFXPanel();
-		Platform.runLater(() -> {
-			WebView webView = new WebView();
-			try {
-				webView.getEngine().loadContent(new String(pen789.api.core.htmlreport(this.myPen789.ZAP_API_KEY)));
-			} catch (ClientApiException e) {}
-			jfxPanel.setScene(new Scene(webView));
-		});
-		testFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		testFrame.add(jfxPanel, BorderLayout.CENTER);
-		this.myPen789.nextFrame(testFrame);
+	private void displayFullDetails() throws ClientApiException {
+		output.append(new String(pen789.api.core.xmlreport(this.myPen789.ZAP_API_KEY)));
 	}
 }

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.ArrayDeque;
@@ -104,8 +105,8 @@ public class pen789 {
 			this.frames.pop().dispose();
 			showRequest();
 		}else{
-			if(api != null){
-				try {
+			try {
+				if(api != null){
 					Thread zap = null;
 					for(Thread t : Thread.getAllStackTraces().keySet()){
 						if(t.getName().equals("ZAP-daemon")){
@@ -116,21 +117,55 @@ public class pen789 {
 							JOptionPane.QUESTION_MESSAGE, null, null, null);
 					if (i == JOptionPane.YES_OPTION) {
 						this.frames.pop().dispose();
-						api.core.runGarbageCollection(ZAP_API_KEY);
-						api.core.deleteAllAlerts(ZAP_API_KEY);
-						api.core.shutdown(this.ZAP_API_KEY);
+						pen789.api.core.runGarbageCollection(ZAP_API_KEY);
+						pen789.api.core.deleteAllAlerts(ZAP_API_KEY);
+						pen789.api.core.shutdown(ZAP_API_KEY);
+						new Thread(new Runnable(){
+							public void run() {
+								deleteRunDir(Paths.get(Constants.runDir).toFile());
+								System.gc();
+							}
+						}).start();
 						if(zap != null){
 							zap.join();
 						}
-					}else{
-						return;
 					}
-				} catch (ClientApiException | InterruptedException e) {System.exit(1);}
+				}
+			} catch (InterruptedException | ClientApiException e) {
+				deleteRunDir(Paths.get(Constants.runDir).toFile());
+				System.gc();
+				System.exit(1);
+			}finally{
+				deleteRunDir(Paths.get(Constants.runDir).toFile());
+				System.gc();
+				System.exit(0);
 			}
-			System.exit(0);
 		}
 	}
 	
+	private void deleteRunDir(File dir) {
+		if(dir.exists()){
+			if(dir.isDirectory()){
+				String path = dir.getAbsolutePath();
+				for(String s : dir.list()){
+					if(Paths.get(path,s).toFile().isDirectory()){
+						deleteRunDir(Paths.get(path,s).toFile());
+					}else{
+						System.out.println((Paths.get(path,s).toFile().canRead()?"I can read. ":" I can not read. ")+
+								(Paths.get(path,s).toFile().canWrite()?"I can write. ":" I can not write. ")+
+								(Paths.get(path,s).toFile().canExecute()?"I can execute. ":" I can not execute. ")+
+								(Paths.get(path,s).toFile().delete()?"I deleted ":"I could not deleted ")+Paths.get(path,s).toString());
+						
+					}
+				}
+			}
+			System.out.println((dir.canRead()?"I can read. ":" I can not read. ")+
+					(dir.canWrite()?"I can write. ":" I can not write. ")+
+					(dir.canExecute()?"I can execute. ":" I can not execute. ")+
+					(dir.delete()?"I deleted ":"I could not deleted ")+dir.toString());
+		}
+	}
+
 	public void showRequest(){
 		this.frames.peek().pack();
 		this.frames.peek().setEnabled(true);
@@ -143,42 +178,22 @@ public class pen789 {
 			this.frames.pop().dispose();
 		this.frames = new ArrayDeque<JFrame>();
 	}
-
-//	public void attack(boolean xss, boolean csrf, boolean sql) {
-//		if(xss||csrf||sql){
-//			new AttackLunchScreen(this, xss?attacks.XSS_ATTACK:attacks.NONE,
-//					csrf?attacks.CSRF_ATTACK:attacks.NONE, sql?attacks.SQL_ATTACK:attacks.NONE);
-//		}
-//	}
 	
 	void activeScan(Attack scan) throws ClientApiException, InterruptedException {
 		double start = System.currentTimeMillis()/1000.0;
 		scan.output.append("Starting Active scan...\n");
 		api.ascan.setOptionHandleAntiCSRFTokens(ZAP_API_KEY, true);
-		scan.resp = api.ascan.scan(this.ZAP_API_KEY, this.target, "True", null, null, null,	null);
-		scan.scanid = ((ApiResponseElement) scan.resp).getValue();
-		api.ascan.pause(ZAP_API_KEY, scan.scanid);
+		api.ascan.setOptionInjectPluginIdInHeader(ZAP_API_KEY, true);
+		api.ascan.setOptionScanHeadersAllRequests(ZAP_API_KEY, true);
 		for(int i=0; i < ((ApiResponseList)api.ascan.policies(null, null)).getItems().size(); i++){
-			switch(this.attackStrength){
-			case "Insane":
-				api.ascan.setPolicyAlertThreshold(ZAP_API_KEY, String.valueOf(i), "Low", null);
-				break;
-			case "High":
-			case "Medium":
-				api.ascan.setPolicyAlertThreshold(ZAP_API_KEY, String.valueOf(i), "Medium", null);
-				break;
-			case "Low":
-				api.ascan.setPolicyAlertThreshold(ZAP_API_KEY, String.valueOf(i), "High", null);
-				break;
-			default:
-				break;
-			}
+			api.ascan.setPolicyAlertThreshold(ZAP_API_KEY, String.valueOf(i), "Medium", null);
 			api.ascan.setPolicyAttackStrength(ZAP_API_KEY, String.valueOf(i), this.attackStrength, null);
 		}
-		api.ascan.resume(ZAP_API_KEY, scan.scanid);
+		scan.resp = api.ascan.scan(this.ZAP_API_KEY, this.target, "True", null, null, null,	null);
+		scan.scanid = ((ApiResponseElement) scan.resp).getValue();
 		int temp1 = scan.progress;
 		while (scan.progress < 100) {
-			Thread.sleep(10000);
+			Thread.sleep(7000);
 			scan.progress = (int) (temp1 + Integer.parseInt(((ApiResponseElement)
 					api.ascan.status(scan.scanid)).getValue()) * (1.0/scan.numberOfScanes));
 			scan.output.append(String.format("Active scan %d%% of task.\n", (scan.progress-temp1)*scan.numberOfScanes));
@@ -195,6 +210,12 @@ public class pen789 {
 		double start = System.currentTimeMillis()/1000.0;
 		scan.output.append("Starting ajaxSpider scan...\n");
 		api.ajaxSpider.setOptionBrowserId(scan.myPen789.ZAP_API_KEY, "HtmlUnit");
+		api.ajaxSpider.setOptionMaxCrawlDepth(this.ZAP_API_KEY, this.attackStrength.equals("Low")?1:
+			this.attackStrength.equals("Medium")?5:
+				this.attackStrength.equals("High")?10:0);
+		api.ajaxSpider.setOptionMaxDuration(this.ZAP_API_KEY, this.attackStrength.equals("Low")?5:
+			this.attackStrength.equals("Medium")?20:
+				this.attackStrength.equals("High")?60:120);
 		scan.resp = api.ajaxSpider.scan(scan.myPen789.ZAP_API_KEY, scan.myPen789.target, null);
 		scan.scanid = ((ApiResponseElement) scan.resp).getValue();
 		while(((ApiResponseElement)api.ajaxSpider.status()).getValue().equals("running")){
@@ -221,7 +242,21 @@ public class pen789 {
 		double start = System.currentTimeMillis()/1000.0;
 		scan.output.append("Starting Spider scan...\n");
 		pen789.api.spider.setOptionMaxDepth(scan.myPen789.ZAP_API_KEY, 10);
-		scan.resp = api.spider.scan(scan.myPen789.ZAP_API_KEY, scan.myPen789.target, null, "true", null, null);
+		api.spider.setOptionMaxDepth(ZAP_API_KEY, this.attackStrength.equals("Low")?1:
+			this.attackStrength.equals("Medium")?5:
+				this.attackStrength.equals("High")?10:20);
+		api.spider.setOptionParseComments(ZAP_API_KEY, true);
+		api.spider.setOptionParseRobotsTxt(ZAP_API_KEY, true);
+		api.spider.setOptionParseSVNEntries(ZAP_API_KEY, true);
+		api.spider.setOptionParseSitemapXml(ZAP_API_KEY, true);
+		api.spider.setOptionPostForm(ZAP_API_KEY, true);
+		api.spider.setOptionProcessForm(ZAP_API_KEY, true);
+		api.spider.setOptionSendRefererHeader(ZAP_API_KEY, true);
+		api.spider.setOptionMaxDuration(ZAP_API_KEY, this.attackStrength.equals("Insane")?60:0);
+		scan.resp = api.spider.scan(scan.myPen789.ZAP_API_KEY, scan.myPen789.target, 
+				this.attackStrength.equals("Low")?"1":
+					this.attackStrength.equals("Medium")?"20":
+						this.attackStrength.equals("High")?"40":"0", null, null, null);
 		Thread.sleep(2000);
 		scan.scanid = ((ApiResponseElement) scan.resp).getValue();
 		int temp1 = scan.progress;
@@ -264,9 +299,6 @@ public class pen789 {
 		/*
 		 * TODO: DONT add runtime or install files to build path since it courses zap logger to fail.
 		 */
-		/*
-		 * FIXME: Display contents need to be set relative to screen size.  
-		 */
 		String key="";
 		do{
 		 key = new BigInteger(130, new SecureRandom()).toString(32);
@@ -289,7 +321,7 @@ public class pen789 {
 			pen789.api = new ClientApi(Constants.DEFUALT_LOCAL_PROXY_ADDRESS, Constants.DEFUALT_PORT);
 			pen789.api.core.generateRootCA(key);
 			pen789.api.context.newContext(key, contextName);
-			new pen789(Constants.DEFUALT_LOCAL_PROXY_ADDRESS,Constants.DEFUALT_PORT, key, Constants.DEFUALT_TARGET);
+			new pen789(Constants.DEFUALT_LOCAL_PROXY_ADDRESS,Constants.DEFUALT_PORT, key, args.length==0?Constants.DEFUALT_TARGET:args[0]);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "pen789 Failed to start.");
 			e.printStackTrace();

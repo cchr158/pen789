@@ -4,7 +4,9 @@ import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +22,8 @@ import javax.swing.SwingWorker;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.Connection.Method;
+import org.jsoup.Connection.Request;
+import org.jsoup.Connection.Response;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.zaproxy.clientapi.core.ApiResponse;
@@ -28,6 +32,7 @@ import org.zaproxy.clientapi.core.ApiResponseList;
 import org.zaproxy.clientapi.core.ApiResponseSet;
 import org.zaproxy.clientapi.core.ClientApiException;
 
+import framesAndPanels.Constants;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
@@ -36,6 +41,8 @@ import javafx.scene.web.WebView;
 public class CSRF extends SwingWorker<Void, Void>{	
 	
 	private pen789 myPen789;
+	private Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(Constants.DEFUALT_LOCAL_PROXY_ADDRESS,
+			Constants.DEFUALT_PORT));
 	private URL loginUrl;
 	private URL registrationUrl;
 	private URL testUrl;
@@ -43,7 +50,7 @@ public class CSRF extends SwingWorker<Void, Void>{
 	private Map<String, String> victimSession;
 	private Map<String, String> attackSession;
 	private StringBuilder attackOutput;
-	private List<Pair<String, String, String>> registrationInputs;
+//	private List<Pair<String, String, String>> registrationInputs;
 	private List<Pair<String, String, String>> loginInputs;
 	private List<Pair<String, String, String>> victimBody;
 	private List<Pair<String, String, String>> attackBody;
@@ -77,27 +84,30 @@ public class CSRF extends SwingWorker<Void, Void>{
 				'?','\\','^','|','~','\'',','};
 		for(char i : chars)
 			replaceChars.put(String.valueOf(i), "%"+Integer.toHexString(i));
+		System.setProperty("http.proxyHost", Constants.DEFUALT_LOCAL_PROXY_ADDRESS);
+		System.setProperty("http.proxyPort", String.valueOf(Constants.DEFUALT_PORT));
 	}
 
 	protected Void doInBackground() throws Exception {
 		this.setProgress(0);
-		this.contextId = ((ApiResponseSet)pen789.api.context.context(pen789.contextName)).getAttribute("id");
-		this.attackOutput.append("CSRF Test Started...<br>\n");
-		this.registrationInputs = this.getInputs(this.registrationUrl,true);//5=15%
+		this.contextId = pen789.contextName;//((ApiResponseSet)pen789.api.context.context(pen789.contextName)).getAttribute("id");
+		this.trafficDump.append("CSRF Test Started...<br>\n");
+		//TODO: do I want to do this anymore?
+//		this.registrationInputs = this.getInputs(this.registrationUrl,true);//5=15%
 		this.setProgress(Math.min(this.getProgress() + 15, 100));
 		this.loginInputs = this.getInputs(this.loginUrl,true);//5=15%
 		this.setProgress(Math.min(this.getProgress() + 15, 100));
-		if(this.registrationInputs == null || this.loginInputs == null){
+		if(/*this.registrationInputs == null ||*/ this.loginInputs == null){
 			this.testFailed("82 Test Failed! No inputs on registration or login page.");
 		}
 		this.setupAuthentication();//1.33=4%
-		this.attackOutput .append("Authentication setup...<br>\n");
+		this.trafficDump .append("Authentication setup...<br>\n");
 		this.setProgress(Math.min(this.getProgress() + 4, 100));
 		this.createUsers();//4=12%
-		this.attackOutput.append("Users created in ZAP database...<br>\n");
-		this.attackOutput.append("============HTTP Requests and Responses============<br>\n<br>\n");
+		this.trafficDump.append("Users created in ZAP database...<br>\n");
+		this.trafficDump.append("============HTTP Requests and Responses============<br>\n<br>\n");
 //		perform spider scan as victim user to reveal authentication space.
-		this.attackOutput.append("==========Perform Spider scan as victim user==========<br>\n"
+		this.trafficDump.append("==========Perform Spider scan as victim user==========<br>\n"
 				+ "***This uncovers the contents of urls that previously required authentication***<br>\n");
 		this.setProgress(this.spiderScan(this.getProgress(), 0.15));//5=15%
 //		get message that will be used by victim.
@@ -112,13 +122,13 @@ public class CSRF extends SwingWorker<Void, Void>{
 			if(RandR == null){
 				this.testFailed("108 Test Failed! Victim user failed to post request.");
 			}
-			this.attackOutput .append("<br>\n<br>\n============Victim User Post Request============<br>\n<br>\n");
-			this.attackOutput.append(RandR[0]);
-			this.attackOutput .append("<br>\n<br>\n============Victim User Post Response============<br>\n<br>\n");
-			this.attackOutput.append(RandR[2]+"<br>\n");
-			this.attackOutput.append(RandR[1]+"<br>\n");
+			this.trafficDump .append("<br>\n<br>\n============Victim User Post Request============<br>\n<br>\n");
+			this.trafficDump.append(RandR[0]);
+			this.trafficDump .append("<br>\n<br>\n============Victim User Post Response============<br>\n<br>\n");
+			this.trafficDump.append(RandR[2]+"<br>\n");
+			this.trafficDump.append(RandR[1]+"<br>\n");
 	//		make attack request body
-			this.attackOutput.append("***The attacking user will now repeat the request of the victim user"
+			this.trafficDump.append("***The attacking user will now repeat the request of the victim user"
 					+ " using the victim user session ID. If it is successful then a CSRF attack is possible***<br>\n<br>\n");
 			this.attackBody = this.getInputs(this.testUrl,false);//1=3%
 			this.setProgress(Math.min(this.getProgress() + 3, 100));
@@ -126,19 +136,19 @@ public class CSRF extends SwingWorker<Void, Void>{
 					this.buildBody(this.attackSession.get("sessionName")));//1=3%
 			this.setProgress(Math.min(this.getProgress() + 3, 100));
 			if(RandR == null){
-				this.attackOutput.append("CSRF attack might be possible. Check request and response pairs above from both victim and attacking users.<br>\n");
+				this.trafficDump.append("CSRF attack might be possible. Check request and response pairs above from both victim and attacking users.<br>\n");
 				this.setProgress(100);
 				this.cancel(true);
 			}
-			this.attackOutput.append("<br>\n<br>\n============Attacking User Post Request============<br>\n<br>\n");
-			this.attackOutput.append(RandR[0]);
-			this.attackOutput.append("<br>\n<br>\n============Attacking User Post Response============<br>\n<br>\n");
-			this.attackOutput.append(RandR[2]+"<br>\n");
-			this.attackOutput.append(RandR[1]+"<br>\n");
+			this.trafficDump.append("<br>\n<br>\n============Attacking User Post Request============<br>\n<br>\n");
+			this.trafficDump.append(RandR[0]);
+			this.trafficDump.append("<br>\n<br>\n============Attacking User Post Response============<br>\n<br>\n");
+			this.trafficDump.append(RandR[2]+"<br>\n");
+			this.trafficDump.append(RandR[1]+"<br>\n");
 			if(RandR[1].contains(this.victimSession.get("username"))){
-				this.attackOutput.append("CSRF attack is likely pressent.<br>\n");
+				this.trafficDump.append("CSRF attack is likely pressent.<br>\n");
 			}else{
-				this.attackOutput.append("CSRF attack might be possible. Check request and response pairs above from both victim and attacking users.<br>\n");//0.5=1.5%
+				this.trafficDump.append("CSRF attack might be possible. Check request and response pairs above from both victim and attacking users.<br>\n");//0.5=1.5%
 			}
 			this.setProgress(Math.min(this.getProgress() + 3, 100));
 		}else{
@@ -179,9 +189,9 @@ public class CSRF extends SwingWorker<Void, Void>{
 			String[] response = this.getRequest(url, this.victimSession);
 			Document doc = Jsoup.parse(response[1]);
 			if(show){
-				this.attackOutput.append("\n\n============Victim User GET Response============<br>\n\n");
-				this.attackOutput.append(response[0]+"<br>\n");
-				this.attackOutput.append(doc.toString()+"<br>\n");
+				this.trafficDump.append("\n\n============Victim User GET Response============<br>\n\n");
+				this.trafficDump.append(response[0]+"<br>\n");
+				this.trafficDump.append(doc.toString()+"<br>\n");
 			}
 			for(String inputs : new String[]{"input", "textarea"}){
 				ArrayList<Element> attributes = doc.select(inputs);
@@ -292,36 +302,46 @@ public class CSRF extends SwingWorker<Void, Void>{
 	private String[] getRequest(URL url, Map<String, String> session){
 		try{
 //			build http request header.
-			HttpURLConnection c = (HttpURLConnection)url.openConnection();
-			c.setRequestMethod("GET");
-			c.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0");
-			c.setRequestProperty("Accept-Language", "en-GB,en;q=0.5");
-			c.setRequestProperty("Referer", url.toString());
-			c.setRequestProperty("Connection", "keep-alive");
-			c.setRequestProperty("Upgrade-Insecure-Requests", "1");
-			c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-			c.setRequestProperty("Host", url.getAuthority());
-			c.setRequestProperty("Cache-Control","no-cache");
+			Connection request = Jsoup.connect(url.toString()).userAgent("Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0")
+			.header("Accept-Language", "en-GB,en;q=0.5").referrer(url.toString()).header("Connection", "keep-alive")
+			.header("Upgrade-Insecure-Requests", "1").header("Content-Type", "application/x-www-form-urlencoded")
+			.header("Host", url.getAuthority()).header("Cache-Control","no-cache")
+			.cookie(session.get("token"), session.get("tokenValue"));
+//			HttpURLConnection c = (HttpURLConnection)url.openConnection();
+//			c.setRequestMethod("GET");
+//			c.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0");
+//			c.setRequestProperty("Accept-Language", "en-GB,en;q=0.5");
+//			c.setRequestProperty("Referer", url.toString());
+//			c.setRequestProperty("Connection", "keep-alive");
+//			c.setRequestProperty("Upgrade-Insecure-Requests", "1");
+//			c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+//			c.setRequestProperty("Host", url.getAuthority());
+//			c.setRequestProperty("Cache-Control","no-cache");
 //			Get Response.
+			
 		    String[] response = new String[]{"",""};
-		    for(String i: c.getHeaderFields().keySet()){
-		    	for(String j: c.getHeaderFields().get(i)){
-		    		response[0] += i+": "+j+"\n<br>";
-		    		if(i!=null && i.equalsIgnoreCase("set-cookie")){
-//		    			TODO finish this.
-		    			System.out.println(i+": "+j+"\n<br>");
-		    		}
-		    	}
+		    for(String i: request.request().headers().keySet()/*c.getHeaderFields().keySet()*/){
+//		    	for(String j: c.getHeaderFields().get(i)){
+		    		response[0] += i+": "+request.request().headers().get(i)+"\n<br>";
+//		    		if(i!=null && i.equalsIgnoreCase("set-cookie")){
+////		    			TODO finish this.
+//		    		}
+//		    	}
 		    }
-		    BufferedReader in = new BufferedReader(
-			        new InputStreamReader(c.getInputStream()));
-			String inputLine;
-			StringBuffer sb = new StringBuffer();
-			while ((inputLine = in.readLine()) != null) {
-				sb.append(inputLine);
-			}
-			response[1] = Jsoup.parse(sb.toString()).toString();
-		    if(c.getResponseCode() == 200){
+		    for(String i: request.request().cookies().keySet()){
+		    	response[0] += i+": "+request.request().headers().get(i)+"\n<br>";
+		    }
+		    Response resp = request.execute();
+//		    BufferedReader in = new BufferedReader(
+//			        new InputStreamReader(c.getInputStream()));
+//			String inputLine;
+//			StringBuffer sb = new StringBuffer();
+//			while ((inputLine = in.readLine()) != null) {
+//				sb.append(inputLine);
+//			}
+			response[1] = resp.body();//Jsoup.parse(sb.toString()).toString();
+			response[0] = resp.statusCode()+" "+resp.statusMessage()+"\n<br>"+response[0];
+		    if(resp.statusCode() == 200){
 		    	return response;
 		    }else{return null;}
 		} catch (Exception e) {
@@ -356,7 +376,7 @@ public class CSRF extends SwingWorker<Void, Void>{
 			Thread.sleep(2000);
 			int temp = progress;
 			while(temp + d*100 > progress){
-				this.attackOutput.append("task: "+(Integer.parseInt(((ApiResponseElement) 
+				this.trafficDump.append("task: "+(Integer.parseInt(((ApiResponseElement) 
 						pen789.api.spider.status(scanid)).getValue()))+"%<br>\n");
 				progress = (int) (temp + Double.parseDouble(((ApiResponseElement) pen789.api.spider.status(scanid)).getValue())*d);
 				this.setProgress(Math.min(progress, 100));
@@ -381,7 +401,8 @@ public class CSRF extends SwingWorker<Void, Void>{
 //				webView.getEngine().loadContent(attackOutput.toString());
 //				jfxPanel.setScene(new Scene(webView));
 //			});
-			this.trafficDump.setText(this.attackOutput.toString());
+			this.attackOutput.append(this.trafficDump.getText());
+//			this.trafficDump.setText(this.attackOutput.toString());
 			pen789.api.core.runGarbageCollection(this.myPen789.ZAP_API_KEY);
 		} catch (ClientApiException e) {
 			e.printStackTrace();
@@ -501,7 +522,7 @@ public class CSRF extends SwingWorker<Void, Void>{
 		try{
 //			Connection connection = Jsoup.connect(loginURL.toString());
 			StringBuilder body = new StringBuilder();
-			for(Pair<String, String, String> p : password2 != null? this.registrationInputs: this.loginInputs){
+			for(Pair<String, String, String> p : /*password2 != null? this.registrationInputs:*/ this.loginInputs){
 				if(p.value != null)
 					p.setV(this.charReplacment(p.value,""));
 				body.append(p.name);
@@ -605,10 +626,10 @@ public class CSRF extends SwingWorker<Void, Void>{
 					if(temp==null)this.testFailed("535 Test Failed! Could not log in as "+username);
 					victimToken = temp[0].replaceFirst(" ", "");
 					victimTokenValue = temp[1];
-					this.attackOutput.append("<br>\n============Victim User Login Request============<br>\n<br>\n");
-					this.attackOutput.append(temp[2]+"<br>\n");
-					this.attackOutput.append("<br>\n============Victim User Login Response============<br>\n<br>\n");
-					this.attackOutput.append(temp[3]+"<br>\n");
+					this.trafficDump.append("<br>\n============Victim User Login Request============<br>\n<br>\n");
+					this.trafficDump.append(temp[2]+"<br>\n");
+					this.trafficDump.append("<br>\n============Victim User Login Response============<br>\n<br>\n");
+					this.trafficDump.append(temp[3]+"<br>\n");
 					this.setProgress(Math.min(this.getProgress() + 3, 100));
 				}else{
 					if(getRegistrationOrLoginCookies(this.attackSession, username, userId, "Set-Cookie", "register", null)==null)
@@ -618,10 +639,10 @@ public class CSRF extends SwingWorker<Void, Void>{
 					if(temp==null)this.testFailed("550 Test Failed! Could not log in as "+username);
 					attackToken = temp[0].replaceFirst(" ", "");
 					attackTokenValue = temp[1];
-					this.attackOutput.append("<br>\n============Attacking User Login Request============<br>\n<br>\n");
-					this.attackOutput.append(temp[2]+"<br>\n");
-					this.attackOutput.append("<br>\n============Attacking User Login Response============<br>\n<br>\n");
-					this.attackOutput.append(temp[3]+"<br>\n");
+					this.trafficDump.append("<br>\n============Attacking User Login Request============<br>\n<br>\n");
+					this.trafficDump.append(temp[2]+"<br>\n");
+					this.trafficDump.append("<br>\n============Attacking User Login Response============<br>\n<br>\n");
+					this.trafficDump.append(temp[3]+"<br>\n");
 					this.setProgress(Math.min(this.getProgress() + 3, 100));
 				}
 			}
@@ -630,7 +651,7 @@ public class CSRF extends SwingWorker<Void, Void>{
 			pen789.api.forcedUser.setForcedUserModeEnabled(this.myPen789.ZAP_API_KEY, true);
 			pen789.api.forcedUser.setForcedUser(this.myPen789.ZAP_API_KEY, contextId, this.victimSession.get("userID"));
 			this.setupSessions(victimToken, victimTokenValue, attackToken, attackTokenValue);//2=6%
-			this.attackOutput.append("Sessions created...<br>\n");
+			this.trafficDump.append("Sessions created...<br>\n");
 			this.setProgress(Math.min(this.getProgress() + 6, 100));
 		} catch (ClientApiException e) {
 			e.printStackTrace();

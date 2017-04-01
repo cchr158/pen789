@@ -1,0 +1,171 @@
+package pen789;
+
+import java.awt.BorderLayout;
+import java.util.Calendar;
+import java.util.List;
+import java.awt.Toolkit;
+import java.text.SimpleDateFormat;
+import java.util.Map;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
+import javax.swing.SwingWorker;
+
+import org.zaproxy.clientapi.core.*;
+
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.web.WebView;
+
+import framesAndPanels.Constants;
+
+public class Attack extends SwingWorker<Void, Void> {
+	pen789 myPen789;
+	ApiResponse resp;
+	String scanid;
+	Integer progress;
+	JTextArea output;
+	boolean activeScane;
+	boolean spiderScane;
+	boolean aJaxSpiderScane;
+	Integer numberOfScanes;
+	Map<String, Constants.attacks> attacks;
+
+	public Attack(pen789 p, Map<String, Constants.attacks> attackTypes, JTextArea Output, boolean activeScane,
+			boolean spiderScane, boolean aJaxSpiderScane) {
+		this.myPen789 = p;
+		this.attacks = attackTypes;
+		pen789.api = new ClientApi(this.myPen789.ZAP_ADDRESS, this.myPen789.ZAP_PORT);
+		this.output = Output;
+		this.progress = new Integer(0);
+		this.activeScane = activeScane;
+		this.spiderScane = spiderScane;
+		this.aJaxSpiderScane = aJaxSpiderScane;
+		this.numberOfScanes = new Integer(0);
+		if (this.activeScane)
+			this.numberOfScanes++;
+		if (this.spiderScane)
+			this.numberOfScanes++;
+		if (this.aJaxSpiderScane)
+			this.numberOfScanes++;
+	}
+
+	public Void doInBackground() {
+		this.setProgress(0);
+		try {
+			pen789.api.context.includeInContext(this.myPen789.ZAP_API_KEY, pen789.contextName, this.myPen789.target+".*");
+			if (this.numberOfScanes != 0)
+				output.append(
+						"Start: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + "\n"
+						+this.myPen789.target+"\n");
+			if (this.spiderScane)
+				this.myPen789.spiderScan(this);
+			if (this.aJaxSpiderScane)
+				this.myPen789.ajaxScan(this);
+			if (this.activeScane)
+				this.myPen789.activeScan(this);
+			this.setProgress(100);
+		} catch (ClientApiException e) {
+			if (e.getMessage().contains("Connection refused")) {
+				JOptionPane.showMessageDialog(null, "Invalid or missing port number");
+
+			} else if (e.getMessage().contains("java.net.UnknownHostException")) {
+				JOptionPane.showMessageDialog(null, "Invalid or missing local proxy address.");
+			} else {
+				JOptionPane.showMessageDialog(null, e.getMessage());
+			}
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			JOptionPane.showMessageDialog(null, "The scan was interrupted and did not finish.");
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	void setProgress(Integer i) {
+		super.setProgress(i);
+	}
+
+	public void done() {
+		Toolkit.getDefaultToolkit().beep();
+		output.append("Finished: " + new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) + "\n");
+		try {
+			StringBuilder message = new StringBuilder();
+			output.append("\nThreats found: ");
+			int numberOfAlerts = Integer
+					.parseInt(((ApiResponseElement) pen789.api.core.numberOfAlerts(null)).getValue());
+			output.append(numberOfAlerts+"");
+			List<Alert> alerts = pen789.api.getAlerts(null, 0, numberOfAlerts);
+			String xssMessage = "";
+			String csrfMessage = "";
+			String sqlMessage = "";
+			for (int i = 0; i < alerts.size(); i++) {
+				if (this.attacks.containsValue(Constants.attacks.XSS_ATTACK)) {
+					if (alerts.get(i).getAlert().contains("Cross Site Scripting")) {
+						this.appendText(alerts.get(i));
+						xssMessage = "\nCross Site Scripting (XSS) attack possible.";
+					}
+					if (alerts.get(i).getAlert().contains("XSS")) {
+						this.appendText(alerts.get(i));
+					}
+				}
+				if (this.attacks.containsValue(Constants.attacks.CSRF_ATTACK)) {
+					if(alerts.get(i).getAlert().contains("Password Autocomplete in Browser") ||
+							alerts.get(i).getAlert().contains("Cookie No HttpOnly Flag") ||
+							alerts.get(i).getAlert().contains("External Redirect")){
+						csrfMessage = "\nCross Site Request Forgery attack might be possible.";
+					}
+				}
+				if (this.attacks.containsValue(Constants.attacks.SQL_ATTACK)) {
+					if (alerts.get(i).getAlert().contains("SQL Injection")) {
+						this.appendText(alerts.get(i));
+						sqlMessage = "\nSQL Injection attack possible.";
+					}
+				}
+			}
+			output.append("\n");
+			message.append(xssMessage + csrfMessage + sqlMessage);
+			if (numberOfAlerts != 0) {
+				message.append("\nWould you like to view the full ZAP report?");
+				if (JOptionPane.showOptionDialog(null, message, "Threat(s) descovered", JOptionPane.YES_NO_OPTION,
+						JOptionPane.QUESTION_MESSAGE, null, null, null) == 0) {
+					displayFullDetails();
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "No threats found");
+			}
+		} catch (ClientApiException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void appendText(Alert alert) {
+		String s = "";
+		if(!(s=alert.getAlert()).isEmpty())output.append("\nThreat: " + alert.getAlert());
+		if(!(s=String.valueOf(alert.getRisk())).isEmpty())output.append("\nThreat level: " + alert.getRisk());
+		if(!(s=alert.getUrl()).isEmpty())output.append("\nThreat URI: " + alert.getUrl());
+		if(!(s=alert.getAttack()).isEmpty())output.append("\nThreat Attack: " + alert.getAttack());
+		if(!(s=alert.getEvidence()).isEmpty())output.append("\nThreat Evidence: " + alert.getEvidence());
+		output.append("\n");
+	}
+
+	private void displayFullDetails() throws ClientApiException {
+//		FIXME: throws null pointer exception.
+		output.append(new String(pen789.api.core.htmlreport(this.myPen789.ZAP_API_KEY)));
+//		JFrame testFrame = new JFrame("Test");
+//		testFrame.addWindowListener(this.myPen789.exitListener);
+//		JFXPanel jfxPanel = new JFXPanel();
+//		Platform.runLater(() -> {
+//			WebView webView = new WebView();
+//			try {
+//				webView.getEngine().loadContent(new String(pen789.api.core.htmlreport(this.myPen789.ZAP_API_KEY)));
+//			} catch (ClientApiException e) {}
+//			jfxPanel.setScene(new Scene(webView));
+//		});
+//		testFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+//		testFrame.add(jfxPanel, BorderLayout.CENTER);
+//		this.myPen789.nextFrame(testFrame);
+	}
+}
