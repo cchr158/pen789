@@ -54,7 +54,7 @@ public class pen789 {
 	public boolean ZAP_API_KEY_SET;
 	public String target;
 	public boolean target_SET;
-	private String attackStrength;
+	public String attackStrength;
 	
 	public pen789(){}
 	
@@ -192,8 +192,9 @@ public class pen789 {
 		scan.resp = api.ascan.scan(this.ZAP_API_KEY, this.target, "True", null, null, null,	null);
 		scan.scanid = ((ApiResponseElement) scan.resp).getValue();
 		int temp1 = scan.progress;
+		Thread.sleep(2000);
 		while (scan.progress < 100) {
-			Thread.sleep(7000);
+			Thread.sleep(60000);
 			scan.progress = (int) (temp1 + Integer.parseInt(((ApiResponseElement)
 					api.ascan.status(scan.scanid)).getValue()) * (1.0/scan.numberOfScanes));
 			scan.output.append(String.format("Active scan %d%% of task.\n", (scan.progress-temp1)*scan.numberOfScanes));
@@ -218,8 +219,8 @@ public class pen789 {
 				this.attackStrength.equals("High")?60:120);
 		scan.resp = api.ajaxSpider.scan(scan.myPen789.ZAP_API_KEY, scan.myPen789.target, null);
 		scan.scanid = ((ApiResponseElement) scan.resp).getValue();
+		Thread.sleep(2000);
 		while(((ApiResponseElement)api.ajaxSpider.status()).getValue().equals("running")){
-			Thread.sleep(5000);
 			String numberOfResults = ((ApiResponseElement)(api.ajaxSpider.numberOfResults())).getValue();
 			int temp = Integer.valueOf(numberOfResults);
 			List<ApiResponse> mostRecentResults = ((ApiResponseList)api.ajaxSpider.results(null, null)).getItems();
@@ -230,6 +231,7 @@ public class pen789 {
 					scan.output.append("aJaxSpider scan: "+mostRecentResult+"      Number of results: "+numberOfResults+".\n");
 				}
 			}
+			Thread.sleep(10000);
 		}
 		scan.progress = scan.getProgress()+100/scan.numberOfScanes;
 		scan.setProgress(Math.min(scan.progress, 100));
@@ -241,7 +243,6 @@ public class pen789 {
 	void spiderScan(Attack scan) throws ClientApiException, InterruptedException{
 		double start = System.currentTimeMillis()/1000.0;
 		scan.output.append("Starting Spider scan...\n");
-		pen789.api.spider.setOptionMaxDepth(scan.myPen789.ZAP_API_KEY, 10);
 		api.spider.setOptionMaxDepth(ZAP_API_KEY, this.attackStrength.equals("Low")?1:
 			this.attackStrength.equals("Medium")?5:
 				this.attackStrength.equals("High")?10:20);
@@ -261,11 +262,11 @@ public class pen789 {
 		scan.scanid = ((ApiResponseElement) scan.resp).getValue();
 		int temp1 = scan.progress;
 		while ((scan.progress-temp1)*scan.numberOfScanes < 99) {
-			Thread.sleep(1000);
 			scan.progress = (int) (temp1 + Integer.parseInt(((ApiResponseElement) 
 					api.spider.status(scan.scanid)).getValue()) * (1.0/ scan.numberOfScanes));
 			scan.output.append(String.format("Spider completed %d%% of task.\n", (scan.progress-temp1)*scan.numberOfScanes));
 			scan.setProgress(Math.min(scan.progress, 100));
+			Thread.sleep(5000);
 		}
 		Thread.sleep(2000);
 		double end = System.currentTimeMillis()/1000.0;

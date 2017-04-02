@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.sun.prism.paint.Color"/>
-<fullyQualifiedTypeName name="java.awt.CardLayout"/>
-<fullyQualifiedTypeName name="javax.swing.GroupLayout"/>
-<fullyQualifiedTypeName name="javafx.scene.web.PopupFeatures"/>
-<fullyQualifiedTypeName name="javafx.scene.web.WebEngine"/>
-<fullyQualifiedTypeName name="javax.security.auth.callback.Callback"/>
 <fullyQualifiedTypeName name="javafx.util.Callback"/>
 <fullyQualifiedTypeName name="javafx.beans.value.ChangeListener"/>
 <fullyQualifiedTypeName name="javafx.concurrent.Worker.State"/>
@@ -59,4 +53,11 @@
 <fullyQualifiedTypeName name="java.net.Proxy"/>
 <fullyQualifiedTypeName name="java.net.Proxy.Type"/>
 <fullyQualifiedTypeName name="java.net.InetSocketAddress"/>
+<fullyQualifiedTypeName name="java.nio.file.Path"/>
+<fullyQualifiedTypeName name="java.net.CookieManager"/>
+<fullyQualifiedTypeName name="java.net.HttpCookie"/>
+<fullyQualifiedTypeName name="org.apache.http.util.TextUtils"/>
+<fullyQualifiedTypeName name="java.io.DataOutputStream"/>
+<fullyQualifiedTypeName name="java.net.SocketException"/>
+<fullyQualifiedTypeName name="java.net.URI"/>
 </qualifiedTypeNameHistroy>

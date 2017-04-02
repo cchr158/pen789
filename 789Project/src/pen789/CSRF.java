@@ -2,11 +2,17 @@ package pen789;
 
 import java.awt.Toolkit;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.CookieManager;
+import java.net.HttpCookie;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Proxy;
+import java.net.SocketException;
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +22,6 @@ import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
-//import javax.swing.JTextPane;
 import javax.swing.SwingWorker;
 
 import org.jsoup.Connection;
@@ -33,10 +38,6 @@ import org.zaproxy.clientapi.core.ApiResponseSet;
 import org.zaproxy.clientapi.core.ClientApiException;
 
 import framesAndPanels.Constants;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
-import javafx.scene.web.WebView;
 
 public class CSRF extends SwingWorker<Void, Void>{	
 	
@@ -47,22 +48,22 @@ public class CSRF extends SwingWorker<Void, Void>{
 	private URL registrationUrl;
 	private URL testUrl;
 	private Map<String, String> users;
-	private Map<String, String> victimSession;
-	private Map<String, String> attackSession;
+	private Tuple<String, String, String> victimUser;
+	private Tuple<String, String, String> attackUser;
+	private CookieManager victimCookieManager;
+	private CookieManager attackerCookieManager;
 	private StringBuilder attackOutput;
-//	private List<Pair<String, String, String>> registrationInputs;
-	private List<Pair<String, String, String>> loginInputs;
-	private List<Pair<String, String, String>> victimBody;
-	private List<Pair<String, String, String>> attackBody;
+	private List<Tuple<String, String, String>> loginInputs;
+	private List<Tuple<String, String, String>> victimBody;
+	private List<Tuple<String, String, String>> attackBody;
 	private static final Map<String,String> replaceChars = new HashMap<String, String>();
-//	private JFXPanel jfxPanel;
-	private /*JTextPane*/JTextArea trafficDump;
+	private JTextArea trafficDump;
 	private String contextId;
-	private class Pair<T, K,V>{
+	private class Tuple<T, K,V>{
 		private K name;
 		private V value;
 		private T type;
-		public Pair(T t, K k, V v){
+		public Tuple(T t, K k, V v){
 			this.type = t;
 			this.name = k;
 			this.value = v;
@@ -70,34 +71,31 @@ public class CSRF extends SwingWorker<Void, Void>{
 		public void setV(V v){this.value=v;}
 	}
 	
-	public CSRF(pen789 myPen789, StringBuilder attackOutput, /*JTextPane*/JTextArea trafficDump, /*JFXPanel jfxPanel,*/ URL loginUrl, URL registrationUrl, Map<String, String> users) {
+	public CSRF(pen789 myPen789, StringBuilder attackOutput, JTextArea trafficDump, URL loginUrl, URL registrationUrl, Map<String, String> users) {
 		this.myPen789 = myPen789;
 		this.loginUrl = loginUrl;
 		this.registrationUrl = registrationUrl;
 		this.users = users;
-		this.victimSession = new HashMap<String, String>();
-		this.attackSession = new HashMap<String, String>();
 		this.attackOutput = attackOutput;
-//		this.jfxPanel = jfxPanel;
 		this.trafficDump = trafficDump;
+		this.victimCookieManager = new CookieManager();
+		this.attackerCookieManager = new CookieManager();
 		char[] chars = new char[]{' ','$', '&','`',':','<','>','[',']','{','}','"','+','#','%','@','/',';','=',
 				'?','\\','^','|','~','\'',','};
 		for(char i : chars)
 			replaceChars.put(String.valueOf(i), "%"+Integer.toHexString(i));
-		System.setProperty("http.proxyHost", Constants.DEFUALT_LOCAL_PROXY_ADDRESS);
-		System.setProperty("http.proxyPort", String.valueOf(Constants.DEFUALT_PORT));
+//		System.setProperty("http.proxyHost", Constants.DEFUALT_LOCAL_PROXY_ADDRESS);
+//		System.setProperty("http.proxyPort", String.valueOf(Constants.DEFUALT_PORT));
 	}
 
 	protected Void doInBackground() throws Exception {
 		this.setProgress(0);
-		this.contextId = pen789.contextName;//((ApiResponseSet)pen789.api.context.context(pen789.contextName)).getAttribute("id");
+		this.contextId = ((ApiResponseSet)pen789.api.context.context(pen789.contextName)).getAttribute("id");
 		this.trafficDump.append("CSRF Test Started...<br>\n");
-		//TODO: do I want to do this anymore?
-//		this.registrationInputs = this.getInputs(this.registrationUrl,true);//5=15%
-		this.setProgress(Math.min(this.getProgress() + 15, 100));
+		this.trafficDump.append("============HTTP Requests and Responses============<br>\n<br>\n");
 		this.loginInputs = this.getInputs(this.loginUrl,true);//5=15%
-		this.setProgress(Math.min(this.getProgress() + 15, 100));
-		if(/*this.registrationInputs == null ||*/ this.loginInputs == null){
+		this.setProgress(Math.min(this.getProgress() + 30, 100));
+		if( this.loginInputs == null){
 			this.testFailed("82 Test Failed! No inputs on registration or login page.");
 		}
 		this.setupAuthentication();//1.33=4%
@@ -105,19 +103,18 @@ public class CSRF extends SwingWorker<Void, Void>{
 		this.setProgress(Math.min(this.getProgress() + 4, 100));
 		this.createUsers();//4=12%
 		this.trafficDump.append("Users created in ZAP database...<br>\n");
-		this.trafficDump.append("============HTTP Requests and Responses============<br>\n<br>\n");
 //		perform spider scan as victim user to reveal authentication space.
 		this.trafficDump.append("==========Perform Spider scan as victim user==========<br>\n"
 				+ "***This uncovers the contents of urls that previously required authentication***<br>\n");
 		this.setProgress(this.spiderScan(this.getProgress(), 0.15));//5=15%
 //		get message that will be used by victim.
-		String testMessage = getmessage();//5=15%
+		String testAuthenticationURL = getAuthenticationURL();//5=15%
 		this.setProgress(Math.min(this.getProgress() + 15, 100));
-		if(testMessage != null){
-			this.testUrl = new URL(testMessage);
+		if(testAuthenticationURL != null){
+			this.testUrl = new URL(testAuthenticationURL);
 	//		victim user makes request in victim session.
-			String[] RandR = this.postRequest(this.testUrl, this.victimSession, 
-					this.buildBody(this.victimSession.get("sessionName")));//1=3%
+			String[] RandR = this.postRequest(this.testUrl, this.victimCookieManager, 
+					this.buildBody("victimSession"));//1=3%
 			this.setProgress(Math.min(this.getProgress() + 3, 100));
 			if(RandR == null){
 				this.testFailed("108 Test Failed! Victim user failed to post request.");
@@ -132,8 +129,8 @@ public class CSRF extends SwingWorker<Void, Void>{
 					+ " using the victim user session ID. If it is successful then a CSRF attack is possible***<br>\n<br>\n");
 			this.attackBody = this.getInputs(this.testUrl,false);//1=3%
 			this.setProgress(Math.min(this.getProgress() + 3, 100));
-			RandR = this.postRequest(this.testUrl, this.victimSession,
-					this.buildBody(this.attackSession.get("sessionName")));//1=3%
+			RandR = this.postRequest(this.testUrl, this.victimCookieManager,
+					this.buildBody("attackSession"));//1=3%
 			this.setProgress(Math.min(this.getProgress() + 3, 100));
 			if(RandR == null){
 				this.trafficDump.append("CSRF attack might be possible. Check request and response pairs above from both victim and attacking users.<br>\n");
@@ -145,7 +142,7 @@ public class CSRF extends SwingWorker<Void, Void>{
 			this.trafficDump.append("<br>\n<br>\n============Attacking User Post Response============<br>\n<br>\n");
 			this.trafficDump.append(RandR[2]+"<br>\n");
 			this.trafficDump.append(RandR[1]+"<br>\n");
-			if(RandR[1].contains(this.victimSession.get("username"))){
+			if(RandR[1].contains(this.victimUser.name)){
 				this.trafficDump.append("CSRF attack is likely pressent.<br>\n");
 			}else{
 				this.trafficDump.append("CSRF attack might be possible. Check request and response pairs above from both victim and attacking users.<br>\n");//0.5=1.5%
@@ -159,22 +156,22 @@ public class CSRF extends SwingWorker<Void, Void>{
 	
 	private String buildBody(String sessionName) {
 		StringBuilder body = new StringBuilder();
-		Map<String, String> session = sessionName.equals("victimSession")?this.victimSession:this.attackSession;
-		for(Pair<String, String, String> p : sessionName.equals("victimSession")?this.victimBody:this.attackBody){
+		Tuple<String, String, String> user = sessionName.equals("victimSession")?this.victimUser:this.attackUser;
+		for(Tuple<String, String, String> p : sessionName.equals("victimSession")?this.victimBody:this.attackBody){
 			body.append(p.name);
 			body.append('=');
 			if(p.type != null && !p.type.equals("Text")){
-				if(p.name.equals(session.get("username")) && p.type.equals("Hidden")){
-					body.append(sessionName.equals("victimSession")?session.get("username"):this.attackSession.get("username"));
+				if(p.name.equals(user.name) && p.type.equals("Hidden")){
+					body.append(user.name);
 				}else{
 					body.append(p.value==null?"ZAPZAP":p.value);
 				}
 			}else{
 				if(sessionName.equals("victimSession")){
-					body.append(this.charReplacment("Im the victim user: "+session.get("username"),"%"));
+					body.append(this.charReplacment("Im the victim user: "+user.name,"%"));
 				}else{
-					body.append(this.charReplacment("Im the attacking user: "+this.attackSession.get("username")
-					+" pretending to be user: "+session.get("username"),"%"));
+					body.append(this.charReplacment("Im the attacking user: "+user.name
+					+" pretending to be user: "+this.victimUser.name,"%"));
 				}
 			}
 			body.append('&');
@@ -183,10 +180,10 @@ public class CSRF extends SwingWorker<Void, Void>{
 		return body.toString();
 	}
 
-	private List<Pair<String, String, String>> getInputs(URL url, boolean show) {
+	private List<Tuple<String, String, String>> getInputs(URL url, boolean show) {
 		try{
-			List<Pair<String, String, String>> temp = new ArrayList<Pair<String, String, String>>();
-			String[] response = this.getRequest(url, this.victimSession);
+			List<Tuple<String, String, String>> temp = new ArrayList<Tuple<String, String, String>>();
+			String[] response = this.getRequest(url, this.victimCookieManager/*this.victimSession*/);
 			Document doc = Jsoup.parse(response[1]);
 			if(show){
 				this.trafficDump.append("\n\n============Victim User GET Response============<br>\n\n");
@@ -226,59 +223,59 @@ public class CSRF extends SwingWorker<Void, Void>{
 								if(!(name.isEmpty() && id.isEmpty())){
 									switch(s){
 									case "Date":
-										temp.add(new Pair<String, String, String>(types[0], name.isEmpty()?id:name,
+										temp.add(new Tuple<String, String, String>(types[0], name.isEmpty()?id:name,
 												value.isEmpty()?"1970-01-01":value));
 										break outerLoop;
 									case "Datetime-local":
-										temp.add(new Pair<String, String, String>(types[1], name.isEmpty()?id:name,
+										temp.add(new Tuple<String, String, String>(types[1], name.isEmpty()?id:name,
 												value.isEmpty()?"1970-01-01T00:00":value));
 										break outerLoop;
 									case "Email":
-										temp.add(new Pair<String, String, String>(types[2], name.isEmpty()?id:name, 
+										temp.add(new Tuple<String, String, String>(types[2], name.isEmpty()?id:name, 
 												value.isEmpty()?"thisIsAnEmailAddress@trustMe.com":value));
 										break outerLoop;
 									case "File":
-										temp.add(new Pair<String, String, String>(types[3], name.isEmpty()?id:name, 
+										temp.add(new Tuple<String, String, String>(types[3], name.isEmpty()?id:name, 
 												value.isEmpty()?"ZAP.txt":value));
 										break outerLoop;
 									case "Hidden":
-										temp.add(new Pair<String, String, String>(types[4], name.isEmpty()?id:name,
+										temp.add(new Tuple<String, String, String>(types[4], name.isEmpty()?id:name,
 												value.isEmpty()?"I-am-hidden":value));
 										break outerLoop;
 									case "Month":
-										temp.add(new Pair<String, String, String>(types[5], name.isEmpty()?id:name, 
+										temp.add(new Tuple<String, String, String>(types[5], name.isEmpty()?id:name, 
 												value.isEmpty()?"1970-01":value));
 										break outerLoop;
 									case "Number":
-										temp.add(new Pair<String, String, String>(types[6], name.isEmpty()?id:name,
+										temp.add(new Tuple<String, String, String>(types[6], name.isEmpty()?id:name,
 												value.isEmpty()?String.valueOf(Integer.MAX_VALUE):value));
 										break outerLoop;
 									case "Password":
-										temp.add(new Pair<String, String, String>(types[7], name.isEmpty()?id:name, null));
+										temp.add(new Tuple<String, String, String>(types[7], name.isEmpty()?id:name, null));
 										break outerLoop;
 									case "Search":
-										temp.add(new Pair<String, String, String>(types[8], name.isEmpty()?id:name, 
+										temp.add(new Tuple<String, String, String>(types[8], name.isEmpty()?id:name, 
 												value.isEmpty()?"looking for CSRF's":value));
 										break outerLoop;
 									case "Tel":
-										temp.add(new Pair<String, String, String>(types[9], name.isEmpty()?id:name, 
+										temp.add(new Tuple<String, String, String>(types[9], name.isEmpty()?id:name, 
 												value.isEmpty()?"+6499999999":value));
 										break outerLoop;
 									case "Time":
-										temp.add(new Pair<String, String, String>(types[11], name.isEmpty()?id:name, 
+										temp.add(new Tuple<String, String, String>(types[11], name.isEmpty()?id:name, 
 												value.isEmpty()?"00:00":value));
 										break outerLoop;
 									case "Url":
-										temp.add(new Pair<String, String, String>(types[12], name.isEmpty()?id:name, 
+										temp.add(new Tuple<String, String, String>(types[12], name.isEmpty()?id:name, 
 												value.isEmpty()?"http://www.example.com":value));
 										break outerLoop;
 									case "Week":
-										temp.add(new Pair<String, String, String>(types[14], name.isEmpty()?id:name, 
+										temp.add(new Tuple<String, String, String>(types[14], name.isEmpty()?id:name, 
 												value.isEmpty()?"1970-W01":value));
 										break outerLoop;
 									case "Text":
 									default:
-										temp.add(new Pair<String, String, String>(types[10], name.isEmpty()?id:name, 
+										temp.add(new Tuple<String, String, String>(types[10], name.isEmpty()?id:name, 
 												value.isEmpty()?"ZAP test for CSRF.":value));
 										break outerLoop;
 									}
@@ -286,7 +283,7 @@ public class CSRF extends SwingWorker<Void, Void>{
 							}
 						}
 					}else{
-						temp.add(new Pair<String, String, String>(types[10], name.isEmpty()?id:name, 
+						temp.add(new Tuple<String, String, String>(types[10], name.isEmpty()?id:name, 
 								value.isEmpty()?"ZAP test for CSRF.":value));
 					}
 				}
@@ -299,58 +296,152 @@ public class CSRF extends SwingWorker<Void, Void>{
 		}
 	}
 
-	private String[] getRequest(URL url, Map<String, String> session){
+	private String[] getRequest(URL url, CookieManager session){
 		try{
 //			build http request header.
-			Connection request = Jsoup.connect(url.toString()).userAgent("Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0")
-			.header("Accept-Language", "en-GB,en;q=0.5").referrer(url.toString()).header("Connection", "keep-alive")
-			.header("Upgrade-Insecure-Requests", "1").header("Content-Type", "application/x-www-form-urlencoded")
-			.header("Host", url.getAuthority()).header("Cache-Control","no-cache")
-			.cookie(session.get("token"), session.get("tokenValue"));
-//			HttpURLConnection c = (HttpURLConnection)url.openConnection();
-//			c.setRequestMethod("GET");
-//			c.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0");
-//			c.setRequestProperty("Accept-Language", "en-GB,en;q=0.5");
-//			c.setRequestProperty("Referer", url.toString());
-//			c.setRequestProperty("Connection", "keep-alive");
-//			c.setRequestProperty("Upgrade-Insecure-Requests", "1");
-//			c.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-//			c.setRequestProperty("Host", url.getAuthority());
-//			c.setRequestProperty("Cache-Control","no-cache");
+			HttpURLConnection connection = (HttpURLConnection)url.openConnection(proxy);
+			connection.setRequestMethod("GET");
+			connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0");
+			connection.setRequestProperty("Accept-Language", "en-GB,en;q=0.5");
+			connection.setRequestProperty("Referer", url.toString());
+			connection.setRequestProperty("Connection", "keep-alive");
+			connection.setRequestProperty("Upgrade-Insecure-Requests", "1");
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			connection.setRequestProperty("Host", url.getAuthority());
+			connection.setRequestProperty("Cache-Control","no-cache");
+			List<HttpCookie> cookieList = session.getCookieStore().getCookies();
+			String cookieString = "";
+			for(int i=0; i<cookieList.size(); i++){
+				 cookieString += cookieList.get(i).toString()+(i>0?";":"");
+			}
+			if(!cookieString.isEmpty())connection.setRequestProperty("Cookie",cookieString);
 //			Get Response.
-			
 		    String[] response = new String[]{"",""};
-		    for(String i: request.request().headers().keySet()/*c.getHeaderFields().keySet()*/){
-//		    	for(String j: c.getHeaderFields().get(i)){
-		    		response[0] += i+": "+request.request().headers().get(i)+"\n<br>";
-//		    		if(i!=null && i.equalsIgnoreCase("set-cookie")){
-////		    			TODO finish this.
-//		    		}
-//		    	}
+		    for(String i : connection.getHeaderFields().keySet()){
+		    	response[0] += i+": ";
+		    	for(String j: connection.getHeaderFields().get(i)){
+		    		response[0] += j;
+		    	}
+		    	response[0] += "\n<br>";
 		    }
-		    for(String i: request.request().cookies().keySet()){
-		    	response[0] += i+": "+request.request().headers().get(i)+"\n<br>";
-		    }
-		    Response resp = request.execute();
-//		    BufferedReader in = new BufferedReader(
-//			        new InputStreamReader(c.getInputStream()));
-//			String inputLine;
-//			StringBuffer sb = new StringBuffer();
-//			while ((inputLine = in.readLine()) != null) {
-//				sb.append(inputLine);
-//			}
-			response[1] = resp.body();//Jsoup.parse(sb.toString()).toString();
-			response[0] = resp.statusCode()+" "+resp.statusMessage()+"\n<br>"+response[0];
-		    if(resp.statusCode() == 200){
+		    BufferedReader in = new BufferedReader(
+			        new InputStreamReader(connection.getInputStream()));
+			String inputLine;
+			StringBuffer sb = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				sb.append(inputLine);
+			}
+			List<String> cookies = connection.getHeaderFields().get("Set-Cookie");
+			if(cookies != null){
+				for(String cookie : cookies){
+					for(HttpCookie c : HttpCookie.parse(cookie)){
+						if(!session.getCookieStore().getCookies().contains(c)){
+							session.getCookieStore().add(new URI(url.toString()), c);
+						}
+					}
+					response[0]+= cookie+"\n<br>";
+				}
+			}
+			response[1] = Jsoup.parse(sb.toString()).toString();
+			response[0] = "GET: "+url.toString()+"\n<br>"+connection.getResponseCode()+": "+connection.getResponseMessage()+"\n<br>"+response[0];
+		    if(connection.getResponseCode() == 200){
 		    	return response;
+		    }else{return null;}
+//		} catch (SocketException | NullPointerException e) {
+//			try {
+//				Thread.sleep(2000);
+//			} catch (InterruptedException e1) {}
+//			return getRequest(url, session);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	private String[] postRequest(URL url, /*Map<String, String>*/CookieManager session, String body){
+		try{
+//			build http request header.
+			HttpURLConnection connection = (HttpURLConnection)url.openConnection(proxy);
+			connection.setRequestMethod("POST");
+			connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0");
+			connection.setRequestProperty("Accept-Language", "en-GB,en;q=0.5");
+			connection.setRequestProperty("Referer", url.toString());
+			connection.setRequestProperty("Connection", "keep-alive");
+			connection.setRequestProperty("Upgrade-Insecure-Requests", "1");
+			connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+			connection.setRequestProperty("Host", url.getAuthority());
+			connection.setRequestProperty("Cache-Control","no-cache");
+			connection.setRequestProperty("Content-Length", String.valueOf(body.getBytes().length));
+			List<HttpCookie> cookieList = session.getCookieStore().getCookies();
+			String cookieString = "";
+			for(int i=0; i<cookieList.size(); i++){
+				 cookieString += cookieList.get(i).toString()+(i>0?";":"");
+			}
+			if(!cookieString.isEmpty())connection.setRequestProperty("Cookie",cookieString);
+			String request = "POST: "+url.toString()+"\n<br>";
+			for(String i: connection.getRequestProperties().keySet()){
+				request += i+": ";
+				for(String j : connection.getRequestProperties().get(i)){
+					request += j+";";
+				}
+				request+="\n<br>";
+			}
+//			for(HttpCookie cookie : session.getCookieStore().getCookies()){
+//				 request += "Cookie: "+cookie.toString();
+//			}
+			request += "Body: "+body+"\n<br>";
+//			Send request.
+			connection.setDoOutput(true);
+			DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+			wr.writeBytes(body);
+			wr.flush();
+			wr.close();
+//			Get Response.
+			BufferedReader in = new BufferedReader(
+				        new InputStreamReader(connection.getInputStream()));
+			String inputLine;
+			StringBuffer sb = new StringBuffer();
+			while ((inputLine = in.readLine()) != null) {
+				sb.append(inputLine);
+			}
+		    String[] response = new String[]{"",""};
+		    response[0] = connection.getResponseCode()+": "+ connection.getResponseMessage()+"\n<br>";
+		    for(String i : connection.getHeaderFields().keySet()){
+		    	response[0] += i+": ";
+		    	for(String j: connection.getHeaderFields().get(i)){
+		    		response[0] += j;
+		    	}
+		    	response[0] += "\n<br>";
+		    }
+		    List<String> cookies = connection.getHeaderFields().get("Set-Cookie");
+			if(cookies != null){
+				for(String cookie : cookies){
+					for(HttpCookie c : HttpCookie.parse(cookie)){
+						if(!session.getCookieStore().getCookies().contains(c)){
+							session.getCookieStore().add(new URI(url.toString()), c);
+						}
+					}
+				}
+			}
+			cookies = connection.getHeaderFields().get("Cookie");
+			if(cookies != null){
+				response[0] += "Cookie: ";
+				for(String cookie : cookies){
+					response[0] += cookie+" ";
+				}
+				response[0]+="\n<br>";
+			}
+		    response[1] = Jsoup.parse(sb.toString()).toString();
+		    if(connection.getResponseCode() == 200){
+		    	return new String[]{request, response[1], response[0]};//request Headers+body, response body, response header.
 		    }else{return null;}
 		} catch (Exception e) {
 		    e.printStackTrace();
 		    return null;
 		  }
 	}
-	
-	private String getmessage() throws MalformedURLException {
+	//gets a URL in the authentication space.
+	private String getAuthenticationURL() throws MalformedURLException {
 		try {
 			List<ApiResponse> messages = ((ApiResponseList)pen789.api.core.messages(this.myPen789.target, null, null)).getItems();
 			for(ApiResponse resp : messages){
@@ -367,12 +458,24 @@ public class CSRF extends SwingWorker<Void, Void>{
 		}
 		return null;
 	}
-	
+	//Rescan with spider to reveal url's in the authentication space.
 	private int spiderScan(int progress, double d) {
 		try {
-			pen789.api.spider.setOptionMaxDepth(this.myPen789.ZAP_API_KEY, 10);
+			pen789.api.spider.setOptionMaxDepth(this.myPen789.ZAP_API_KEY, this.myPen789.attackStrength.equals("Low")?1:
+				this.myPen789.attackStrength.equals("Medium")?5:
+					this.myPen789.attackStrength.equals("High")?10:20);
+			pen789.api.spider.setOptionParseComments(this.myPen789.ZAP_API_KEY, true);
+			pen789.api.spider.setOptionParseRobotsTxt(this.myPen789.ZAP_API_KEY, true);
+			pen789.api.spider.setOptionParseSVNEntries(this.myPen789.ZAP_API_KEY, true);
+			pen789.api.spider.setOptionParseSitemapXml(this.myPen789.ZAP_API_KEY, true);
+			pen789.api.spider.setOptionPostForm(this.myPen789.ZAP_API_KEY, true);
+			pen789.api.spider.setOptionProcessForm(this.myPen789.ZAP_API_KEY, true);
+			pen789.api.spider.setOptionSendRefererHeader(this.myPen789.ZAP_API_KEY, true);
+			pen789.api.spider.setOptionMaxDuration(this.myPen789.ZAP_API_KEY, this.myPen789.attackStrength.equals("Insane")?60:0);
 			String scanid = ((ApiResponseElement) pen789.api.spider.scanAsUser(this.myPen789.ZAP_API_KEY, contextId,
-					this.victimSession.get("userID"), this.myPen789.target, null, "true", null)).getValue();
+					this.victimUser.type, this.myPen789.target, this.myPen789.attackStrength.equals("Low")?"1":
+						this.myPen789.attackStrength.equals("Medium")?"20":
+							this.myPen789.attackStrength.equals("High")?"40":"0", null, null)).getValue();
 			Thread.sleep(2000);
 			int temp = progress;
 			while(temp + d*100 > progress){
@@ -391,18 +494,11 @@ public class CSRF extends SwingWorker<Void, Void>{
 	}
 
 	protected void done(){
-		//FIXME remove all JavaFX components and replace with Swing components only!
 		try {
-			pen789.api.users.removeUser(this.myPen789.ZAP_API_KEY, this.contextId, this.victimSession.get("userID"));
-			pen789.api.users.removeUser(this.myPen789.ZAP_API_KEY, this.contextId, this.attackSession.get("userID"));
+			pen789.api.users.removeUser(this.myPen789.ZAP_API_KEY, this.contextId, this.victimUser.type);
+			pen789.api.users.removeUser(this.myPen789.ZAP_API_KEY, this.contextId, this.attackUser.type);
 			Toolkit.getDefaultToolkit().beep();
-//			Platform.runLater(() -> {
-//				WebView webView = new WebView();
-//				webView.getEngine().loadContent(attackOutput.toString());
-//				jfxPanel.setScene(new Scene(webView));
-//			});
 			this.attackOutput.append(this.trafficDump.getText());
-//			this.trafficDump.setText(this.attackOutput.toString());
 			pen789.api.core.runGarbageCollection(this.myPen789.ZAP_API_KEY);
 		} catch (ClientApiException e) {
 			e.printStackTrace();
@@ -410,119 +506,13 @@ public class CSRF extends SwingWorker<Void, Void>{
 		JOptionPane.showMessageDialog(null, "Test Complete.");
 	}
 
-	private String[] postRequest(URL url, Map<String, String> session, String body){
-		try{
-//			build http request header.
-			Connection connection = Jsoup.connect(url.toString()).method(Method.POST)
-					.header("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0")
-					.header("Accept-Language", "en-GB,en;q=0.5")
-					.header("Referer", url.toString())
-					.header("Connection", "keep-alive")
-					.header("Upgrade-Insecure-Requests", "1")
-					.header("Content-Type", "application/x-www-form-urlencoded")
-					.header("Host", url.getAuthority())
-					.header("Cache-Control","no-cache")
-					.header("Content-Length", String.valueOf(body.getBytes().length));
-			if(session.get("token")!=null && session.get("tokenValue")!=null){
-					connection.cookie(session.get("token")==null?"null":session.get("token"),
-							session.get("tokenValue")==null?"":session.get("tokenValue"));
-			}
-			connection.requestBody(body);
-//			Send request.
-			String request = "POST: "+url.toString()+"\n<br>";
-			for(String s: connection.request().headers().keySet()){
-				request += s+": "+connection.request().headers().get(s)+"\n";
-			}
-			request += connection.request().requestBody()+"\n<br>";
-			connection.execute();
-//			Get Response.
-		    String[] response = new String[]{"",""};
-		    response[0] = connection.response().statusMessage()+": "+connection.response().statusCode()+"\n<br>";
-		    for(String key : connection.response().headers().keySet()){
-		    	response[0] += key+": "+connection.response().headers().get(key)+"\n<br>";
-		    }
-		    for(String token : connection.response().cookies().keySet()){
-		    	response[0] += "Set-Cookie: "+token+"="+connection.response().cookies().get(token)+"\n<br>";
-		    	session.put(token, connection.response().cookies().get(token));
-		    }
-		    response[1] = Jsoup.parse(connection.response().body()).toString();
-		    if(connection.response().statusCode() == 200){
-		    	return new String[]{request, response[1], response[0]};//request Headers+body, response body, response header.
-		    }else{return null;}
-		} catch (Exception e) {
-		    e.printStackTrace();
-		    return null;
-		  }
-	}
-	
-	/*private void setRequestHeaders(Connection connection, URL path, String cookieName, String cookieValue,
-			String contentLength, String requestMethod) 
-			throws ProtocolException, ClientApiException {
-		connection.method(requestMethod.equals("POST")?Connection.Method.POST:Connection.Method.GET)
-		.data("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0")
-		.data("Accept-Language", "en-GB,en;q=0.5")
-		.data("Referer", path.toString())
-		.data("Connection", "keep-alive")
-		.data("Upgrade-Insecure-Requests", "1")
-		.data("Content-Type", "application/x-www-form-urlencoded")
-		.data("Host", path.getAuthority())
-		.data("Cache-Control","no-cache");
-		if(!(cookieName==null || cookieValue==null)){
-			connection.cookie(cookieName==null?"null":cookieName, cookieValue==null?"null":cookieValue);
-		}
-		if(requestMethod.equals("POST")){
-			connection.data("Content-Length", contentLength);
-		}
-	}*/
-
-	/*private String sendRequest(Connection.Request connection, String body, String cookie) throws IOException {
-	    StringBuilder request = new StringBuilder();
-	    request.append("POST"+": ");
-	    request.append(connection.url().toString()+"<br>\n");
-	    request.append("User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:51.0) Gecko/20100101 Firefox/51.0<br>\n");
-	    request.append("Accept-Language: en-GB,en;q=0.5<br>\n");
-	    request.append("Referer: "+ connection.toString()+"<br>\n");
-	    request.append("Connection: keep-alive<br>\n");
-	    request.append("Upgrade-Insecure-Requests: 1<br>\n");
-	    request.append("Content-Type: application/x-www-form-urlencoded<br>\n");
-	    if(connection.method().equals(Connection.Method.POST)){
-	    	request.append("Cookie: "+ cookie+"<br>\n");
-			request.append("Content-Length: " + body.getBytes().length+"<br>\n");
-		}
-	    request.append("Host: "+connection.url().getAuthority()+"\n<br>");
-	    request.append(body);
-	    return request.toString();
-	}*/
-	
-	/*private String[] getResponse(Connection.Response connection, Map<String, String> session) throws IOException {
-		StringBuilder responseHead = new StringBuilder();
-		Map<String, String> header;
-		responseHead.append(connection.statusMessage()+": "+connection.statusCode()+"\n<br>");
-	    for(String feild : (header=connection.headers()).keySet()){
-	    	responseHead.append(feild+": ");
-	    	responseHead.append(header.get(feild)v+" ");
-	    	responseHead.append("<br>\n");
-	    }
-	    for(String k : connection.cookies().keySet()){
-	    	responseHead.append("Set-Cookie: ");
-	    	responseHead.append(k+"=");
-	    	responseHead.append(connection.cookies().get(k)+"\n<br>");
-//	    	FIXME test this line of code to see if it fixes cookie problem.
-	    	session.put(k, connection.cookies().get(k));
-	    }
-	    return new String[]{responseHead.toString(), Jsoup.parse(connection.body()).toString()};
-	}*/
-
-	private String[] loginOrRegisterUser(String username, String password1, String password2, URL loginURL, Map<String, String> session){
+	private String[] loginOrRegisterUser(String username, String password1, URL loginURL, CookieManager session){
 //		Sanitise inputs.
 		username = this.charReplacment(username,"%");
 		password1 = this.charReplacment(password1,"%");
-		if(password2 != null)
-			password2 = this.charReplacment(password2,"%");
 		try{
-//			Connection connection = Jsoup.connect(loginURL.toString());
 			StringBuilder body = new StringBuilder();
-			for(Pair<String, String, String> p : /*password2 != null? this.registrationInputs:*/ this.loginInputs){
+			for(Tuple<String, String, String> p : this.loginInputs){
 				if(p.value != null)
 					p.setV(this.charReplacment(p.value,""));
 				body.append(p.name);
@@ -545,14 +535,8 @@ public class CSRF extends SwingWorker<Void, Void>{
 				body.append('&');
 			}
 			body.deleteCharAt(body.length()-1);
-			String[] temp = this.postRequest(loginURL, session, body.toString());
-//			this.setRequestHeaders(connection, loginURL, session.get("token"),/*+"="+*/session.get("tokenValue"),
-//					Integer.toString(body.toString().getBytes().length), "POST");
 //			Send request.
-//			String request = sendRequest(connection.request(), body.toString(), session.get("token")+"="+session.get("tokenValue"));
-//			connection.requestBody(body.toString()).execute();
-//			Get Response.
-//			String[] response = getResponse(connection.response(), session);
+			String[] temp = this.postRequest(loginURL, session, body.toString());
 			if(temp != null){
 				return temp;//new String[]{request, response[1], response[0]};//request Headers+body, response body, response header.
 			}else{return null;}
@@ -562,35 +546,15 @@ public class CSRF extends SwingWorker<Void, Void>{
 		  }
 	}
 	
-	private void setupSessions(String victimToken, String victimTokenValue, String attackToken, String attackTokenValue){
-		try{
-//			get token type used by this site.
-			List<ApiResponse> arl = ((ApiResponseList) pen789.api.httpSessions.sessionTokens(this.myPen789.target)).getItems();
-			String token = "";
-			if(!arl.isEmpty()){
-				token = ((ApiResponseElement)arl.get(0)).getValue();
-			}
-//			session 1
-			this.victimSession.put("sessionName", "victimSession");
-			this.victimSession.put("token", victimToken==null?token:victimToken);
-			this.victimSession.put("tokenValue", victimTokenValue==null?randomString(32):victimTokenValue);
-//			session 2
-			this.attackSession.put("sessionName", "attackSession");
-			this.attackSession.put("token", attackToken==null?token:attackToken);
-			this.attackSession.put("tokenValue", attackTokenValue==null?randomString(32):attackTokenValue);
-		} catch (ClientApiException e) {
-			e.printStackTrace();
-			this.testFailed("Test Failed! Could not complete set up of sessions.");
-		}
-	}
 	private void setupAuthentication(){
+//		FIXME get the session created by zap to be active.
 		try {
 			StringBuilder params = new StringBuilder();
 			params.append("loginUrl=");
 			params.append(this.loginUrl.toString());
 			params.append('&');
 			params.append("loginRequestData=");
-			params.append(charReplacment("username={%username%}&password={%password%}","{}="));
+			params.append(charReplacment("username={%25username%25}&password={%25password%25}","{}=%"));
 			pen789.api.authentication.setAuthenticationMethod(this.myPen789.ZAP_API_KEY, contextId, "formBasedAuthentication",
 					params.toString());
 			pen789.api.authentication.setLoggedInIndicator(this.myPen789.ZAP_API_KEY, contextId, "^(.*?(\bLogout\b)[^$]*)$");
@@ -604,10 +568,6 @@ public class CSRF extends SwingWorker<Void, Void>{
 	private void createUsers(){
 		try {
 			int i=0;
-			String victimToken = null;
-			String victimTokenValue = null;
-			String attackToken = null;
-			String attackTokenValue = null;
 			for(String username : this.users.keySet()){
 				String userId = ((ApiResponseElement)pen789.api.users.newUser(this.myPen789.ZAP_API_KEY, contextId, username)).getValue();
 				StringBuilder params = new StringBuilder();
@@ -619,38 +579,31 @@ public class CSRF extends SwingWorker<Void, Void>{
 				pen789.api.users.setUserEnabled(this.myPen789.ZAP_API_KEY, contextId, userId, "true");
 //				register and login users with site.
 				if(i++%2==0){
-					if(getRegistrationOrLoginCookies(this.victimSession, username, userId, "Set-Cookie", "register", null)==null)
-						this.testFailed("532 Test Failed! couldn't register user: "+username);
 					this.setProgress(Math.min(this.getProgress() + 6, 100));
-					String[] temp = getRegistrationOrLoginCookies(this.victimSession, username, userId, "Set-Cookie", "login", null);
+					this.victimUser = new Tuple<String, String, String>(userId, username, this.users.get(username));
+					String[] temp = this.loginOrRegisterUser(username, this.users.get(username), this.loginUrl, this.victimCookieManager);
 					if(temp==null)this.testFailed("535 Test Failed! Could not log in as "+username);
-					victimToken = temp[0].replaceFirst(" ", "");
-					victimTokenValue = temp[1];
 					this.trafficDump.append("<br>\n============Victim User Login Request============<br>\n<br>\n");
-					this.trafficDump.append(temp[2]+"<br>\n");
+					this.trafficDump.append(temp[0]+"<br>\n");
 					this.trafficDump.append("<br>\n============Victim User Login Response============<br>\n<br>\n");
-					this.trafficDump.append(temp[3]+"<br>\n");
+					this.trafficDump.append(temp[2]+"<br>\n");
+					this.trafficDump.append(temp[1]+"<br>\n");
+					pen789.api.forcedUser.setForcedUser(this.myPen789.ZAP_API_KEY, contextId, userId);
 					this.setProgress(Math.min(this.getProgress() + 3, 100));
 				}else{
-					if(getRegistrationOrLoginCookies(this.attackSession, username, userId, "Set-Cookie", "register", null)==null)
-						this.testFailed("547 Test Failed! couldn't register user: "+username);
 					this.setProgress(Math.min(this.getProgress() + 6, 100));
-					String[] temp = getRegistrationOrLoginCookies(this.attackSession, username, userId, "Set-Cookie", "login", null);
+					this.attackUser = new Tuple<String, String, String>(userId, username, this.users.get(username));
+					String[] temp = this.loginOrRegisterUser(username, this.users.get(username), this.loginUrl, this.attackerCookieManager);
 					if(temp==null)this.testFailed("550 Test Failed! Could not log in as "+username);
-					attackToken = temp[0].replaceFirst(" ", "");
-					attackTokenValue = temp[1];
 					this.trafficDump.append("<br>\n============Attacking User Login Request============<br>\n<br>\n");
-					this.trafficDump.append(temp[2]+"<br>\n");
+					this.trafficDump.append(temp[0]+"<br>\n");
 					this.trafficDump.append("<br>\n============Attacking User Login Response============<br>\n<br>\n");
-					this.trafficDump.append(temp[3]+"<br>\n");
+					this.trafficDump.append(temp[2]+"<br>\n");
+					this.trafficDump.append(temp[1]+"<br>\n");
 					this.setProgress(Math.min(this.getProgress() + 3, 100));
 				}
 			}
-			pen789.api.users.setUserEnabled(this.myPen789.ZAP_API_KEY, contextId, this.attackSession.get("userID"), "true");
-			pen789.api.users.setUserEnabled(this.myPen789.ZAP_API_KEY, contextId, this.victimSession.get("userID"), "true");
 			pen789.api.forcedUser.setForcedUserModeEnabled(this.myPen789.ZAP_API_KEY, true);
-			pen789.api.forcedUser.setForcedUser(this.myPen789.ZAP_API_KEY, contextId, this.victimSession.get("userID"));
-			this.setupSessions(victimToken, victimTokenValue, attackToken, attackTokenValue);//2=6%
 			this.trafficDump.append("Sessions created...<br>\n");
 			this.setProgress(Math.min(this.getProgress() + 6, 100));
 		} catch (ClientApiException e) {
@@ -668,30 +621,6 @@ public class CSRF extends SwingWorker<Void, Void>{
 				e.printStackTrace();
 			}
 		}
-	}
-	private String[] getRegistrationOrLoginCookies(Map<String, String> session, String username, String userId,
-			String lookfor, String action, String response) {
-		session.put("username", username);
-		session.put("password", this.users.get(username));
-		session.put("userID", userId);
-		String[] randr = null;
-		if(action.equals("register")){
-			randr = this.loginOrRegisterUser(session.get("username"), session.get("password"),
-				session.get("password"), this.registrationUrl, session);
-		}else if(action.equals("login")){
-			randr = this.loginOrRegisterUser(session.get("username"), session.get("password"), null, this.loginUrl, session);
-		}
-		if(randr != null && (randr[2].contains(lookfor) || randr[2].contains(lookfor.toLowerCase()) || 
-				randr[2].contains(lookfor.toUpperCase()))){
-			int start = (randr[2].indexOf(lookfor)==-1?randr[2].indexOf(lookfor.toLowerCase())==-1?randr[2].indexOf(lookfor.toUpperCase()):
-				randr[2].indexOf(lookfor.toLowerCase()):randr[2].indexOf(lookfor))+lookfor.length()+1;
-			int end = randr[2].indexOf('\n', start);
-			String cookie = randr[2].substring(start, end).replaceAll(" ", "");
-			int middle = cookie.indexOf('=');
-			String[] str = new String[]{cookie.substring(0, middle), cookie.substring(middle+1), randr[0],randr[2]+"\n"+randr[1]};
-			return str;
-		}
-		return null;
 	}
 	
 	private String charReplacment(String str, String ignor){

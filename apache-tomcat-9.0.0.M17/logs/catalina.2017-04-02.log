@@ -1,0 +1,28 @@
+02-Apr-2017 09:41:14.876 INFO [ContainerBackgroundProcessor[StandardEngine[Catalina]]] org.apache.catalina.startup.HostConfig.undeploy Undeploying context []
+02-Apr-2017 09:41:14.958 INFO [ContainerBackgroundProcessor[StandardEngine[Catalina]]] org.apache.catalina.startup.HostConfig.undeploy Undeploying context [/bodgeit]
+02-Apr-2017 09:41:18.164 WARNING [ContainerBackgroundProcessor[StandardEngine[Catalina]]] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [bodgeit] registered the JDBC driver [org.hsqldb.jdbcDriver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+02-Apr-2017 09:41:23.628 INFO [ContainerBackgroundProcessor[StandardEngine[Catalina]]] org.apache.catalina.startup.HostConfig.undeploy Undeploying context [/examples]
+02-Apr-2017 09:41:23.644 INFO [ContainerBackgroundProcessor[StandardEngine[Catalina]]] org.apache.catalina.startup.HostConfig.undeploy Undeploying context [/host-manager]
+02-Apr-2017 09:41:23.657 INFO [ContainerBackgroundProcessor[StandardEngine[Catalina]]] org.apache.catalina.startup.HostConfig.undeploy Undeploying context [/manager]
+02-Apr-2017 09:41:23.672 INFO [ContainerBackgroundProcessor[StandardEngine[Catalina]]] org.apache.catalina.startup.HostConfig.undeploy Undeploying context [/docs]
+02-Apr-2017 09:41:23.695 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployWAR Deploying web application archive D:\the test build\apache-tomcat-9.0.0.M17\webapps\bodgeit.war
+02-Apr-2017 09:41:26.935 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployWAR Deployment of web application archive D:\the test build\apache-tomcat-9.0.0.M17\webapps\bodgeit.war has finished in 3,240 ms
+02-Apr-2017 09:41:26.936 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory D:\the test build\apache-tomcat-9.0.0.M17\webapps\ROOT
+02-Apr-2017 09:41:27.446 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory D:\the test build\apache-tomcat-9.0.0.M17\webapps\ROOT has finished in 510 ms
+02-Apr-2017 09:41:27.446 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory D:\the test build\apache-tomcat-9.0.0.M17\webapps\docs
+02-Apr-2017 09:41:27.479 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory D:\the test build\apache-tomcat-9.0.0.M17\webapps\docs has finished in 33 ms
+02-Apr-2017 09:41:27.480 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory D:\the test build\apache-tomcat-9.0.0.M17\webapps\examples
+02-Apr-2017 09:41:27.979 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory D:\the test build\apache-tomcat-9.0.0.M17\webapps\examples has finished in 499 ms
+02-Apr-2017 09:41:27.979 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory D:\the test build\apache-tomcat-9.0.0.M17\webapps\host-manager
+02-Apr-2017 09:41:28.015 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory D:\the test build\apache-tomcat-9.0.0.M17\webapps\host-manager has finished in 36 ms
+02-Apr-2017 09:41:28.015 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployDirectory Deploying web application directory D:\the test build\apache-tomcat-9.0.0.M17\webapps\manager
+02-Apr-2017 09:41:28.052 INFO [localhost-startStop-2] org.apache.catalina.startup.HostConfig.deployDirectory Deployment of web application directory D:\the test build\apache-tomcat-9.0.0.M17\webapps\manager has finished in 37 ms
+02-Apr-2017 22:57:14.567 INFO [main] org.apache.catalina.core.StandardServer.await A valid shutdown command was received via the shutdown port. Stopping the Server instance.
+02-Apr-2017 22:57:14.568 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["http-nio-8080"]
+02-Apr-2017 22:57:14.663 INFO [main] org.apache.coyote.AbstractProtocol.pause Pausing ProtocolHandler ["ajp-nio-8009"]
+02-Apr-2017 22:57:14.759 INFO [main] org.apache.catalina.core.StandardService.stopInternal Stopping service Catalina
+02-Apr-2017 22:57:15.001 WARNING [localhost-startStop-3] org.apache.catalina.loader.WebappClassLoaderBase.clearReferencesJdbc The web application [bodgeit] registered the JDBC driver [org.hsqldb.jdbcDriver] but failed to unregister it when the web application was stopped. To prevent a memory leak, the JDBC Driver has been forcibly unregistered.
+02-Apr-2017 22:57:15.022 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["http-nio-8080"]
+02-Apr-2017 22:57:15.023 INFO [main] org.apache.coyote.AbstractProtocol.stop Stopping ProtocolHandler ["ajp-nio-8009"]
+02-Apr-2017 22:57:15.025 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["http-nio-8080"]
+02-Apr-2017 22:57:15.026 INFO [main] org.apache.coyote.AbstractProtocol.destroy Destroying ProtocolHandler ["ajp-nio-8009"]
