@@ -59,6 +59,7 @@ public class CSRF extends SwingWorker<Void, Void>{
 	private static final Map<String,String> replaceChars = new HashMap<String, String>();
 	private JTextArea trafficDump;
 	private String contextId;
+	private String sessionName;
 	private class Tuple<T, K,V>{
 		private K name;
 		private V value;
@@ -80,12 +81,13 @@ public class CSRF extends SwingWorker<Void, Void>{
 		this.trafficDump = trafficDump;
 		this.victimCookieManager = new CookieManager();
 		this.attackerCookieManager = new CookieManager();
+		this.sessionName = this.randomString(32);
 		char[] chars = new char[]{' ','$', '&','`',':','<','>','[',']','{','}','"','+','#','%','@','/',';','=',
 				'?','\\','^','|','~','\'',','};
 		for(char i : chars)
 			replaceChars.put(String.valueOf(i), "%"+Integer.toHexString(i));
-//		System.setProperty("http.proxyHost", Constants.DEFUALT_LOCAL_PROXY_ADDRESS);
-//		System.setProperty("http.proxyPort", String.valueOf(Constants.DEFUALT_PORT));
+		System.setProperty("http.proxyHost", Constants.DEFUALT_LOCAL_PROXY_ADDRESS);
+		System.setProperty("http.proxyPort", String.valueOf(Constants.DEFUALT_PORT));
 	}
 
 	protected Void doInBackground() throws Exception {
@@ -93,8 +95,10 @@ public class CSRF extends SwingWorker<Void, Void>{
 		this.contextId = ((ApiResponseSet)pen789.api.context.context(pen789.contextName)).getAttribute("id");
 		this.trafficDump.append("CSRF Test Started...<br>\n");
 		this.trafficDump.append("============HTTP Requests and Responses============<br>\n<br>\n");
+		this.setupZAPSession();
+		this.setProgress(Math.min(this.getProgress() + 15, 100));
 		this.loginInputs = this.getInputs(this.loginUrl,true);//5=15%
-		this.setProgress(Math.min(this.getProgress() + 30, 100));
+		this.setProgress(Math.min(this.getProgress() + 15, 100));
 		if( this.loginInputs == null){
 			this.testFailed("82 Test Failed! No inputs on registration or login page.");
 		}
@@ -154,6 +158,24 @@ public class CSRF extends SwingWorker<Void, Void>{
 		return null;
 	}
 	
+	private void setupZAPSession() {
+//		TODO finish this.
+		List<ApiResponse> sites;
+		try {
+			sites = ((ApiResponseList)pen789.api.core.sites()).getItems();
+			for(ApiResponse r : sites){
+				ApiResponseElement e = ((ApiResponseElement) r);
+				if(this.myPen789.target.contains(e.getValue())){
+					pen789.api.httpSessions.createEmptySession(this.myPen789.ZAP_API_KEY, e.getValue(), this.sessionName);
+					pen789.api.httpSessions.setActiveSession(this.myPen789.ZAP_API_KEY, e.getValue(), this.sessionName);
+				}
+			}
+		} catch (ClientApiException e1) {
+			e1.printStackTrace();
+			this.testFailed("Test Failed: Could not set up session with the ZAP proxy.");
+		}
+	}
+
 	private String buildBody(String sessionName) {
 		StringBuilder body = new StringBuilder();
 		Tuple<String, String, String> user = sessionName.equals("victimSession")?this.victimUser:this.attackUser;
@@ -547,7 +569,6 @@ public class CSRF extends SwingWorker<Void, Void>{
 	}
 	
 	private void setupAuthentication(){
-//		FIXME get the session created by zap to be active.
 		try {
 			StringBuilder params = new StringBuilder();
 			params.append("loginUrl=");

@@ -1,0 +1,166 @@
+2017-04-03 16:42:29,738 [main ] INFO  Constant - Copying defaults from G:\the test build\789Project\ZAP_Instal_Files\xml\config.xml to G:\the test build\789Project\ZAP_Runtime_Files_20170403164224_141\config.xml
+2017-04-03 16:42:29,755 [main ] INFO  Constant - Creating directory G:\the test build\789Project\ZAP_Runtime_Files_20170403164224_141\session
+2017-04-03 16:42:29,783 [main ] INFO  Constant - Creating directory G:\the test build\789Project\ZAP_Runtime_Files_20170403164224_141\dirbuster
+2017-04-03 16:42:29,798 [main ] INFO  Constant - Creating directory G:\the test build\789Project\ZAP_Runtime_Files_20170403164224_141\fuzzers
+2017-04-03 16:42:29,813 [main ] INFO  Constant - Creating directory G:\the test build\789Project\ZAP_Runtime_Files_20170403164224_141\plugin
+2017-04-03 16:42:29,958 [main ] INFO  Constant - Backing up config file to G:\the test build\789Project\ZAP_Runtime_Files_20170403164224_141\config.xml.bak
+2017-04-03 16:42:29,980 [main ] INFO  Constant - Upgraded from 1004000
+2017-04-03 16:42:30,146 [main ] INFO  DaemonBootstrap - OWASP ZAP 2.5.0 started.
+2017-04-03 16:42:30,253 [main ] INFO  AbstractParam - Setting config api.key = u0bbk4i4sq2lghg1b3dccsd8mu was null
+2017-04-03 16:42:30,253 [main ] INFO  AbstractParam - Setting config scanner.strength = HIGH was null
+2017-04-03 16:42:30,256 [main ] INFO  SSLConnector - Reading supported SSL/TLS protocols...
+2017-04-03 16:42:30,256 [main ] INFO  SSLConnector - Using a SSLEngine...
+2017-04-03 16:42:30,497 [main ] INFO  SSLConnector - Done reading supported SSL/TLS protocols: [SSLv2Hello, SSLv3, TLSv1, TLSv1.1, TLSv1.2]
+2017-04-03 16:42:30,499 [main ] INFO  OptionsParamCertificate - Unsafe SSL renegotiation disabled.
+2017-04-03 16:42:31,126 [main ] INFO  ENGINE - open start - state not modified
+2017-04-03 16:42:31,397 [main ] INFO  ENGINE - dataFileCache open start
+2017-04-03 16:42:31,414 [main ] INFO  ENGINE - dataFileCache open end
+2017-04-03 16:42:31,560 [ZAP-daemon] INFO  ExtensionFactory - Loading extensions
+2017-04-03 16:42:39,497 [ZAP-daemon] INFO  ExtensionFactory - Extensions loaded
+2017-04-03 16:42:39,895 [ZAP-daemon] INFO  FilterFactory - loaded filter Change user agent to other browsers. 
+2017-04-03 16:42:39,896 [ZAP-daemon] INFO  FilterFactory - loaded filter Detect insecure or potentially malicious content in HTTP responses.
+2017-04-03 16:42:39,896 [ZAP-daemon] INFO  FilterFactory - loaded filter Detect and alert 'Set-cookie' attempt in HTTP response for modification.
+2017-04-03 16:42:39,896 [ZAP-daemon] INFO  FilterFactory - loaded filter Avoid browser cache (strip off IfModifiedSince)
+2017-04-03 16:42:39,896 [ZAP-daemon] INFO  FilterFactory - loaded filter Log cookies sent by browser.
+2017-04-03 16:42:39,896 [ZAP-daemon] INFO  FilterFactory - loaded filter Log unique GET queries into file:filter/get.xls
+2017-04-03 16:42:39,896 [ZAP-daemon] INFO  FilterFactory - loaded filter Log unique POST queries into file:  filter/post.xls
+2017-04-03 16:42:39,896 [ZAP-daemon] INFO  FilterFactory - loaded filter Log request and response into file: filter/message.txt
+2017-04-03 16:42:39,896 [ZAP-daemon] INFO  FilterFactory - loaded filter Replace HTTP request body using defined pattern.
+2017-04-03 16:42:39,897 [ZAP-daemon] INFO  FilterFactory - loaded filter Replace HTTP request header using defined pattern.
+2017-04-03 16:42:39,897 [ZAP-daemon] INFO  FilterFactory - loaded filter Replace HTTP response body using defined pattern.
+2017-04-03 16:42:39,897 [ZAP-daemon] INFO  FilterFactory - loaded filter Replace HTTP response header using defined pattern.
+2017-04-03 16:42:39,897 [ZAP-daemon] INFO  FilterFactory - loaded filter Send ZAP session request ID
+2017-04-03 16:42:40,438 [ZAP-daemon] INFO  ExtensionLoader - Initializing Allows ZAP to check for updates
+2017-04-03 16:42:40,443 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionViewOption
+2017-04-03 16:42:40,443 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionEdit
+2017-04-03 16:42:40,443 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionFilter
+2017-04-03 16:42:40,443 [ZAP-daemon] INFO  ExtensionLoader - Initializing Provides a rest based API for controlling and accessing ZAP
+2017-04-03 16:42:40,493 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionState
+2017-04-03 16:42:40,493 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionHistory
+2017-04-03 16:42:40,497 [ZAP-daemon] INFO  ExtensionLoader - Initializing Show hidden fields and enable disabled fields
+2017-04-03 16:42:40,499 [ZAP-daemon] INFO  ExtensionLoader - Initializing Search messages for strings and regular expressions 
+2017-04-03 16:42:40,500 [ZAP-daemon] INFO  ExtensionLoader - Initializing Encode/Decode/Hash...
+2017-04-03 16:42:40,500 [ZAP-daemon] INFO  ExtensionLoader - Initializing Allows you to intercept and modify requests and responses
+2017-04-03 16:42:40,500 [ZAP-daemon] INFO  ExtensionLoader - Initializing Passive scanner
+2017-04-03 16:42:40,680 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Script passive scan rules
+2017-04-03 16:42:40,680 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Stats Passive Scan Rule
+2017-04-03 16:42:40,681 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Application Error Disclosure
+2017-04-03 16:42:40,681 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Incomplete or No Cache-control and Pragma HTTP Header Set
+2017-04-03 16:42:40,681 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Content-Type Header Missing
+2017-04-03 16:42:40,681 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Cookie No HttpOnly Flag
+2017-04-03 16:42:40,682 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Cookie Without Secure Flag
+2017-04-03 16:42:40,682 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Cross-Domain JavaScript Source File Inclusion
+2017-04-03 16:42:40,682 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Web Browser XSS Protection Not Enabled
+2017-04-03 16:42:40,682 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Secure Pages Include Mixed Content
+2017-04-03 16:42:40,682 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Password Autocomplete in Browser
+2017-04-03 16:42:40,683 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Private IP Disclosure
+2017-04-03 16:42:40,683 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: Session ID in URL Rewrite
+2017-04-03 16:42:40,683 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: X-Content-Type-Options Header Missing
+2017-04-03 16:42:40,683 [ZAP-daemon] INFO  ExtensionPassiveScan - loaded passive scan rule: X-Frame-Options Header Not Set
+2017-04-03 16:42:40,709 [ZAP-daemon] INFO  ExtensionLoader - Initializing Allows you to view and manage alerts
+2017-04-03 16:42:40,709 [ZAP-daemon] INFO  ExtensionLoader - Initializing Active scanner, heavily based on the original Paros active scanner, but with additional tests added
+2017-04-03 16:42:40,716 [ZAP-daemon] INFO  ExtensionLoader - Initializing Spider used for automatically finding URIs on a site
+2017-04-03 16:42:40,722 [ZAP-daemon] INFO  ExtensionLoader - Initializing A set of common popup menus for miscellaneous tasks
+2017-04-03 16:42:40,723 [ZAP-daemon] INFO  ExtensionLoader - Initializing Forced browsing of files and directories using code from the OWASP DirBuster tool
+2017-04-03 16:42:40,724 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionManualRequest
+2017-04-03 16:42:40,724 [ZAP-daemon] INFO  ExtensionLoader - Initializing Compares 2 sessions and generates an HTML file showing the differences
+2017-04-03 16:42:40,724 [ZAP-daemon] INFO  ExtensionLoader - Initializing Invoke external applications passing context related information such as URLs and parameters
+2017-04-03 16:42:40,726 [ZAP-daemon] INFO  ExtensionLoader - Initializing Handles anti cross site request forgery (CSRF) tokens
+2017-04-03 16:42:40,729 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionAuthentication
+2017-04-03 16:42:42,018 [ZAP-daemon] INFO  ExtensionAuthentication - Loaded authentication method types: [Form-based Authentication, HTTP/NTLM Authentication, Manual Authentication, Script-based Authentication]
+2017-04-03 16:42:42,019 [ZAP-daemon] INFO  ExtensionLoader - Initializing Creates a dynamic SSL certificate to allow SSL communications to be intercepted without warnings being generated by the browser
+2017-04-03 16:42:42,019 [ZAP-daemon] INFO  ExtensionLoader - Initializing Logs errors to the Output tab in development mode only
+2017-04-03 16:42:42,019 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionUserManagement
+2017-04-03 16:42:42,020 [ZAP-daemon] INFO  ExtensionLoader - Initializing Summarise and analyse FORM and URL parameters as well as cookies
+2017-04-03 16:42:42,020 [ZAP-daemon] INFO  ExtensionLoader - Initializing Script integration
+2017-04-03 16:42:42,041 [ZAP-daemon] INFO  ExtensionLoader - Initializing Scripting console, supports all JSR 223 scripting languages
+2017-04-03 16:42:42,042 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionForcedUser
+2017-04-03 16:42:42,043 [ZAP-daemon] INFO  ExtensionLoader - Initializing Extension handling HTTP sessions
+2017-04-03 16:42:42,045 [ZAP-daemon] INFO  ExtensionLoader - Initializing Zest is a specialized scripting language from Mozilla specifically designed to be used in security tools
+2017-04-03 16:42:42,645 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionDiff
+2017-04-03 16:42:42,646 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionRequestPostTableView
+2017-04-03 16:42:42,646 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionSessionManagement
+2017-04-03 16:42:42,897 [ZAP-daemon] INFO  ExtensionSessionManagement - Loaded session management method types: [Cookie-based Session Management, HTTP Authentication Session Management]
+2017-04-03 16:42:42,898 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionHttpPanelRequestFormTableView
+2017-04-03 16:42:42,898 [ZAP-daemon] INFO  ExtensionLoader - Initializing Capture messages from WebSockets with the ability to set breakpoints.
+2017-04-03 16:42:42,908 [ZAP-daemon] INFO  ExtensionLoader - Initializing Summarise and analyse FORM and URL parameters as well as cookies
+2017-04-03 16:42:42,908 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionAuthorization
+2017-04-03 16:42:42,909 [ZAP-daemon] INFO  ExtensionLoader - Initializing AJAX Spider, uses Crawljax
+2017-04-03 16:42:42,911 [ZAP-daemon] INFO  ExtensionLoader - Initializing Handles adding Global Excluded URLs
+2017-04-03 16:42:42,911 [ZAP-daemon] INFO  ExtensionLoader - Initializing Adds menu item to refresh the Sites tree
+2017-04-03 16:42:42,911 [ZAP-daemon] INFO  ExtensionLoader - Initializing Adds support for configurable keyboard shortcuts for all of the ZAP menus.
+2017-04-03 16:42:42,911 [ZAP-daemon] INFO  ExtensionLoader - Initializing OWASP ZAP User Guide
+2017-04-03 16:42:42,911 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionReport
+2017-04-03 16:42:42,911 [ZAP-daemon] INFO  ExtensionLoader - Initializing Allows you to configure which extensions are loaded when ZAP starts 
+2017-04-03 16:42:42,912 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionHttpPanelComponentonentAll
+2017-04-03 16:42:42,912 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionHttpPanelHexView
+2017-04-03 16:42:42,912 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionHttpPanelImageView
+2017-04-03 16:42:42,912 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionHttpPanelLargeRequestView
+2017-04-03 16:42:42,912 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionHttpPanelLargeResponseView
+2017-04-03 16:42:42,912 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionHttpPanelRequestQueryCookieTableView
+2017-04-03 16:42:42,912 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionHttpPanelSyntaxHighlightTextView
+2017-04-03 16:42:42,912 [ZAP-daemon] INFO  ExtensionLoader - Initializing Statistics
+2017-04-03 16:42:42,913 [ZAP-daemon] INFO  ExtensionStats - Start recording in memory stats
+2017-04-03 16:42:42,914 [ZAP-daemon] INFO  ExtensionLoader - Initializing Context alert rules filter
+2017-04-03 16:42:42,916 [ZAP-daemon] INFO  ExtensionLoader - Initializing Active Scan Rules
+2017-04-03 16:42:42,917 [ZAP-daemon] INFO  ExtensionLoader - Initializing Translations of the core language files
+2017-04-03 16:42:42,917 [ZAP-daemon] INFO  ExtensionLoader - Initializing Provides the foundation for concrete message types (for example, HTTP, WebSockets) expose fuzzer implementations.
+2017-04-03 16:42:42,919 [ZAP-daemon] INFO  ExtensionLoader - Initializing Allows to fuzz HTTP messages.
+2017-04-03 16:42:42,920 [ZAP-daemon] INFO  ExtensionLoader - Initializing The ZAP Getting Started Guide
+2017-04-03 16:42:42,920 [ZAP-daemon] INFO  ExtensionLoader - Initializing The Online menu links
+2017-04-03 16:42:42,920 [ZAP-daemon] INFO  ExtensionLoader - Initializing Passive Scan Rules
+2017-04-03 16:42:42,921 [ZAP-daemon] INFO  ExtensionLoader - Initializing Quick Start panel 
+2017-04-03 16:42:42,921 [ZAP-daemon] INFO  ExtensionLoader - Initializing ExtensionSaveRawHttpMessage
+2017-04-03 16:42:42,921 [ZAP-daemon] INFO  ExtensionLoader - Initializing Provides WebDrivers to control several browsers using Selenium and includes HtmlUnit browser.
+2017-04-03 16:42:42,922 [ZAP-daemon] INFO  ExtensionLoader - Initializing Tips and Tricks
+2017-04-03 16:42:42,923 [ZAP-daemon] INFO  ExtensionLoader - Initializing Allows to fuzz WebSocket messages.
+2017-04-03 16:42:43,018 [ZAP-daemon] INFO  PluginFactory - loaded plugin Path Traversal
+2017-04-03 16:42:43,019 [ZAP-daemon] INFO  PluginFactory - loaded plugin Remote File Inclusion
+2017-04-03 16:42:43,019 [ZAP-daemon] INFO  PluginFactory - loaded plugin Server Side Include
+2017-04-03 16:42:43,020 [ZAP-daemon] INFO  PluginFactory - loaded plugin Cross Site Scripting (Reflected)
+2017-04-03 16:42:43,021 [ZAP-daemon] INFO  PluginFactory - loaded plugin Cross Site Scripting (Persistent)
+2017-04-03 16:42:43,021 [ZAP-daemon] INFO  PluginFactory - loaded plugin SQL Injection
+2017-04-03 16:42:43,023 [ZAP-daemon] INFO  PluginFactory - loaded plugin Server Side Code Injection
+2017-04-03 16:42:43,024 [ZAP-daemon] INFO  PluginFactory - loaded plugin Remote OS Command Injection
+2017-04-03 16:42:43,024 [ZAP-daemon] INFO  PluginFactory - loaded plugin Directory Browsing
+2017-04-03 16:42:43,025 [ZAP-daemon] INFO  PluginFactory - loaded plugin External Redirect
+2017-04-03 16:42:43,025 [ZAP-daemon] INFO  PluginFactory - loaded plugin Buffer Overflow
+2017-04-03 16:42:43,026 [ZAP-daemon] INFO  PluginFactory - loaded plugin Format String Error
+2017-04-03 16:42:43,026 [ZAP-daemon] INFO  PluginFactory - loaded plugin CRLF Injection
+2017-04-03 16:42:43,027 [ZAP-daemon] INFO  PluginFactory - loaded plugin Parameter Tampering
+2017-04-03 16:42:43,028 [ZAP-daemon] INFO  PluginFactory - loaded plugin Cross Site Scripting (Persistent) - Prime
+2017-04-03 16:42:43,030 [ZAP-daemon] INFO  PluginFactory - loaded plugin Cross Site Scripting (Persistent) - Spider
+2017-04-03 16:42:43,031 [ZAP-daemon] INFO  PluginFactory - loaded plugin Script Active Scan Rules
+2017-04-03 16:42:43,031 [ZAP-daemon] INFO  PluginFactory - loaded plugin Path Traversal
+2017-04-03 16:42:43,032 [ZAP-daemon] INFO  PluginFactory - loaded plugin Remote File Inclusion
+2017-04-03 16:42:43,032 [ZAP-daemon] INFO  PluginFactory - loaded plugin Server Side Include
+2017-04-03 16:42:43,033 [ZAP-daemon] INFO  PluginFactory - loaded plugin Cross Site Scripting (Reflected)
+2017-04-03 16:42:43,034 [ZAP-daemon] INFO  PluginFactory - loaded plugin Cross Site Scripting (Persistent)
+2017-04-03 16:42:43,034 [ZAP-daemon] INFO  PluginFactory - loaded plugin SQL Injection
+2017-04-03 16:42:43,035 [ZAP-daemon] INFO  PluginFactory - loaded plugin Server Side Code Injection
+2017-04-03 16:42:43,035 [ZAP-daemon] INFO  PluginFactory - loaded plugin Remote OS Command Injection
+2017-04-03 16:42:43,036 [ZAP-daemon] INFO  PluginFactory - loaded plugin Directory Browsing
+2017-04-03 16:42:43,036 [ZAP-daemon] INFO  PluginFactory - loaded plugin External Redirect
+2017-04-03 16:42:43,037 [ZAP-daemon] INFO  PluginFactory - loaded plugin Buffer Overflow
+2017-04-03 16:42:43,037 [ZAP-daemon] INFO  PluginFactory - loaded plugin Format String Error
+2017-04-03 16:42:43,038 [ZAP-daemon] INFO  PluginFactory - loaded plugin CRLF Injection
+2017-04-03 16:42:43,039 [ZAP-daemon] INFO  PluginFactory - loaded plugin Parameter Tampering
+2017-04-03 16:42:43,039 [ZAP-daemon] INFO  PluginFactory - loaded plugin Cross Site Scripting (Persistent) - Prime
+2017-04-03 16:42:43,040 [ZAP-daemon] INFO  PluginFactory - loaded plugin Cross Site Scripting (Persistent) - Spider
+2017-04-03 16:42:43,041 [ZAP-daemon] INFO  PluginFactory - loaded plugin Script Active Scan Rules
+2017-04-03 16:42:43,064 [Thread-5] INFO  ExtensionDynSSL - Creating new root CA certificate
+2017-04-03 16:42:43,598 [ZAP-daemon] INFO  DaemonBootstrap - ZAP is now listening on 127.93.102.181:50051
+2017-04-03 16:42:44,243 [Thread-5] INFO  ExtensionDynSSL - New root CA certificate created
+2017-04-03 16:42:45,775 [ZAP-ProxyThread-1] INFO  ExtensionDynSSL - Creating new root CA certificate
+2017-04-03 16:42:46,128 [ZAP-ProxyThread-1] INFO  ExtensionDynSSL - New root CA certificate created
+2017-04-03 16:43:38,782 [Thread-8] INFO  SpiderThread - Starting spidering scan on SpiderApi-0 at Mon Apr 03 16:43:38 NZST 2017
+2017-04-03 16:43:38,784 [Thread-8] INFO  Spider - Spider initializing...
+2017-04-03 16:43:38,883 [Thread-8] INFO  Spider - Starting spider...
+2017-04-03 16:43:46,444 [ZAP-PassiveScanner] ERROR PassiveScanThread - Parser failed on record 165 from History table
+org.parosproxy.paros.network.HttpMalformedHeaderException: No history reference for id 165 type=9
+	at org.parosproxy.paros.model.HistoryReference.getHttpMessage(Unknown Source)
+	at org.zaproxy.zap.extension.pscan.PassiveScanThread.run(Unknown Source)
+2017-04-03 16:43:46,935 [pool-3-thread-2] INFO  Spider - Spidering process is complete. Shutting down...
+2017-04-03 16:43:46,951 [Thread-10] INFO  SpiderThread - Spider scanning complete: true
+2017-04-03 16:44:57,762 [ZAP-ProxyThread-23] INFO  HttpSessionsSite - Setting new active session for site 'localhost:8080': HttpSession [name=J2GAQPU9TF8HZO5DB523N9K6VHJ9NOIM, active=false, tokenValues='']
+2017-04-03 16:44:57,780 [ZAP-ProxyThread-24] INFO  HttpSessionsSite - Setting new active session for site 'localhost:8080': HttpSession [name=J2GAQPU9TF8HZO5DB523N9K6VHJ9NOIM, active=true, tokenValues='']

@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<config>
+<version>2004003</version>
+<userDir/>
+<connection>
+		<proxyChain>
+			<hostName/>
+			<port>8080</port>
+			
+			<realm/>
+			<userName/>
+			<password/>		
+			<prompt>false</prompt>
+		<enabled>false</enabled>
+</proxyChain>
+		<auth/>
+		<securityProtocolsEnabled>
+			<protocol>SSLv3</protocol>
+			<protocol>TLSv1</protocol>
+			<protocol>TLSv1.1</protocol>
+			<protocol>TLSv1.2</protocol>
+		</securityProtocolsEnabled>
+	<timeoutInSecs>20</timeoutInSecs>
+</connection>
+<proxy>
+		<ip>localhost</ip>
+		<port>8080</port>
+		<reverseProxy>
+			<use>0</use>	
+			<ip>localhost</ip>
+			<httpPort>80</httpPort>
+			<httpsPort>443</httpsPort>
+		</reverseProxy>		
+		<securityProtocolsEnabled>
+			<protocol>SSLv3</protocol>
+			<protocol>TLSv1</protocol>
+			<protocol>TLSv1.1</protocol>
+			<protocol>TLSv1.2</protocol>
+		</securityProtocolsEnabled>
+	</proxy>
+<view>
+		<processImages>0</processImages>
+		<displayOption>1</displayOption>
+		<editorView>2</editorView>
+		<brkPanelView>0</brkPanelView>
+		<showMainToolbar>1</showMainToolbar>
+	</view>
+<start>
+        <checkForUpdates>false</checkForUpdates>
+    <dayLastChecked/>
+</start>
+<certificate>
+		<use>0</use>
+		<clientCertLocation/>
+		<experimentalSlotListIndex>false</experimentalSlotListIndex>
+	</certificate>
+<spider>
+		<thread>2</thread>
+		<maxDepth>5</maxDepth>
+		<scope/>
+		<postform>true</postform>
+		<processform>true</processform>
+		<sendCookies>false</sendCookies>
+		<skipurl/>
+		<requestwait>200</requestwait>
+		<parseComments>true</parseComments>
+		<parseRobotsTxt>true</parseRobotsTxt>
+	</spider>
+<scanner>
+		<hostPerScan>2</hostPerScan>
+		<threadPerHost>2</threadPerHost>
+	<strength>HIGH</strength>
+</scanner>
+<portscan>
+		<threadPerHost>5</threadPerHost>
+		<maxPort>10240</maxPort>
+	</portscan>
+<pscans>
+		<autoTagScanners>
+			<scanner>
+				<name>html_tag_form</name>
+				<type>TAG</type>
+				<config>Form</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>&lt;form</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_tag_password</name>
+				<type>TAG</type>
+				<config>Password</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>&lt;password\s</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_type_password</name>
+				<type>TAG</type>
+				<config>Password</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>type\s*=\s*['"]?password['"]?</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_type_hidden</name>
+				<type>TAG</type>
+				<config>Hidden</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>type\s*=\s*['"]?hidden['"]?</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_type_upload</name>
+				<type>TAG</type>
+				<config>Upload</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>type\s*=\s*['"]?file['"]?</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_tag_object</name>
+				<type>TAG</type>
+				<config>Object</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>&lt;object\s</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_tag_script</name>
+				<type>TAG</type>
+				<config>Script</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>&lt;script</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_mailto</name>
+				<type>TAG</type>
+				<config>MailTo</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>&lt;.*href\s*['"]?mailto:</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_setcookie</name>
+				<type>TAG</type>
+				<config>SetCookie</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex>set-cookie</resHeadRegex>
+				<resBodyRegex/>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_comment1</name>
+				<type>TAG</type>
+				<config>Comment</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>/\*</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>html_comment2</name>
+				<type>TAG</type>
+				<config>Comment</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex/>
+				<resBodyRegex>&lt;!--</resBodyRegex>
+				<enabled>true</enabled>
+			</scanner>
+			<scanner>
+				<name>response_json</name>
+				<type>TAG</type>
+				<config>JSON</config>
+				<reqUrlRegex/>
+				<reqHeadRegex/>
+				<resHeadRegex>type\s*:\s*application\/json</resHeadRegex>
+				<resBodyRegex/>
+				<enabled>true</enabled>
+			</scanner>
+		</autoTagScanners>
+	</pscans>
+<addons>
+<block/>
+</addons>
+<api>
+<key>u0bbk4i4sq2lghg1b3dccsd8mu</key>
+</api>
+<runnableAddOns>
+<addon>
+<id>help</id>
+<version>6</version>
+</addon>
+<addon>
+<id>diff</id>
+<version>6</version>
+</addon>
+<addon>
+<id>websocket</id>
+<version>11</version>
+<extensions>
+<extension>org.zaproxy.zap.extension.websocket.fuzz.ExtensionWebSocketFuzzer</extension>
+</extensions>
+</addon>
+<addon>
+<id>zest</id>
+<version>21</version>
+</addon>
+<addon>
+<id>pscanrules</id>
+<version>16</version>
+</addon>
+<addon>
+<id>invoke</id>
+<version>3</version>
+</addon>
+<addon>
+<id>gettingStarted</id>
+<version>5</version>
+</addon>
+<addon>
+<id>coreLang</id>
+<version>10</version>
+</addon>
+<addon>
+<id>directorylistv1</id>
+<version>3</version>
+</addon>
+<addon>
+<id>quickstart</id>
+<version>18</version>
+</addon>
+<addon>
+<id>ascanrules</id>
+<version>23</version>
+</addon>
+<addon>
+<id>saverawmessage</id>
+<version>3</version>
+</addon>
+<addon>
+<id>scripts</id>
+<version>16</version>
+</addon>
+<addon>
+<id>bruteforce</id>
+<version>5</version>
+</addon>
+<addon>
+<id>alertFilters</id>
+<version>3</version>
+</addon>
+<addon>
+<id>onlineMenu</id>
+<version>4</version>
+</addon>
+<addon>
+<id>fuzz</id>
+<version>5</version>
+</addon>
+<addon>
+<id>spiderAjax</id>
+<version>15</version>
+</addon>
+<addon>
+<id>selenium</id>
+<version>5</version>
+</addon>
+<addon>
+<id>tips</id>
+<version>5</version>
+</addon>
+<addon>
+<id>reveal</id>
+<version>2</version>
+</addon>
+</runnableAddOns>
+</config>

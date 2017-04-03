@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="javafx.util.Callback"/>
-<fullyQualifiedTypeName name="javafx.beans.value.ChangeListener"/>
-<fullyQualifiedTypeName name="javafx.concurrent.Worker.State"/>
 <fullyQualifiedTypeName name="javafx.concurrent.Worker"/>
 <fullyQualifiedTypeName name="java.util.EventListener"/>
 <fullyQualifiedTypeName name="java.awt.Event"/>
@@ -60,4 +57,7 @@
 <fullyQualifiedTypeName name="java.io.DataOutputStream"/>
 <fullyQualifiedTypeName name="java.net.SocketException"/>
 <fullyQualifiedTypeName name="java.net.URI"/>
+<fullyQualifiedTypeName name="pen789.pen789"/>
+<fullyQualifiedTypeName name="org.zaproxy.clientapi.core.ApiResponseElement"/>
+<fullyQualifiedTypeName name="org.zaproxy.clientapi.core.ApiResponse"/>
 </qualifiedTypeNameHistroy>
